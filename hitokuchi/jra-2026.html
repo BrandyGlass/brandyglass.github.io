@@ -47,7 +47,7 @@ main{padding-top:22px;padding-bottom:60px}.panel{background:var(--card);border:1
   <h2>計算の前提と限界</h2>
   <div class="notice"><strong>これは2026年JRA平地の一般・特別競走の簡易試算です。</strong> 実際の払戻しや利益を保証するものではありません。</div>
   <ul>
-    <li>本賞金：1着はJRA公式公表額。2〜5着は1着の40％・25％・15％・10％。</li>
+    <li>本賞金：1着はJRA公式公表額。2〜5着は40％・25％・15％・10％を基礎に、JRAの公表額に合わせて端数調整。2〜4着の100万円以上は10万円単位、それ以外および5着は1万円単位で四捨五入しています。</li>
     <li>6〜9着の出走奨励金：1着賞金の8％・7％・6％・4％、1万円単位で四捨五入。大きな着差など、不交付条件はここでは判定しません。</li>
     <li>10着以下は0円としています。オープン・重賞競走、障害競走、特定の特別賞金は今回の試算の対象外です。</li>
     <li>特別出走手当、内国産馬奨励賞、内国産牝馬奨励賞、距離別出走奨励賞、付加賞、その他の条件付き賞金は正確には反映していません。</li>
@@ -62,6 +62,12 @@ main{padding-top:22px;padding-bottom:60px}.panel{background:var(--card);border:1
 (()=>{
 "use strict";
 const RATES=[1,.4,.25,.15,.1,.08,.07,.06,.04,0];
+// JRA表示額に合わせた着順別の端数調整（5着は1万円単位）。
+const officialMain=(first,rank)=>{
+  if(rank===0)return first;
+  const raw=first*RATES[rank];
+  return rank<4 && raw>=100?Math.round(raw/10)*10:Math.round(raw);
+};
 const C=[
 {id:"2new",age:"2",text:"2歳・新馬（一般）",one:780},
 {id:"2loss",age:"2",text:"2歳・未勝利（一般）",one:590},
@@ -134,7 +140,7 @@ function calculate(){
  for(const r of rows){
   const def=C.find(x=>x.id===r.cls);if(!def)continue;
   const starts=r.counts.reduce((s,v)=>s+v,0);
-  const main=r.counts.slice(0,5).reduce((s,n,i)=>s+n*def.one*RATES[i],0);
+  const main=r.counts.slice(0,5).reduce((s,n,i)=>s+n*officialMain(def.one,i),0);
   const bonus=useIncentive?r.counts.slice(5,9).reduce((s,n,i)=>s+n*Math.round(def.one*RATES[i+5]),0):0;
   const allowance=useAllowance?starts*perStart:0;
   winningRows+=r.counts[0]||0;
