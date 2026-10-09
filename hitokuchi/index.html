@@ -34,7 +34,7 @@
     <div class="nav"><div class="brand"><span class="brand-mark" aria-hidden="true"></span>ひとくち計算室</div><small>無料・登録不要・すべて概算</small></div>
     <div class="hero">
       <div><div class="eyebrow">OWNERSHIP COST CALCULATOR</div><h1>この馬、いくら稼げば<br>元が取れる？</h1><p>出資金だけでは見えない、一口馬主のお金の話。<br>維持費・会費・引退年齢を変えて、損益分岐点を表で比べよう。</p></div>
-      <div class="hero-note">2026年10月版 ／ ノルマンディー参考設定</div>
+      <div class="hero-note">Ver.0.2 ／ 各クラブの会費を入力可能</div>
     </div>
   </div>
 </header>
@@ -51,11 +51,16 @@
           <div class="callout" id="unitPrice" aria-live="polite">1口の価格：30,000円</div>
         </div>
       </section>
-      <section class="panel pad"><div class="section-head"><h2>毎年かかるお金</h2><span class="num">02</span></div>
+      <section class="panel pad"><div class="section-head"><h2>維持費・保険料・月会費</h2><span class="num">02</span></div>
         <div class="fields">
+          <div class="subhead">馬の費用（1口あたり）</div>
           <div class="field"><label for="monthly">毎月の維持費 <span class="unit">1口あたり／円</span></label><input id="monthly" type="number" min="0" max="100000" step="100" value="1200" inputmode="numeric"><small class="hint">平均額として一律計算。実際の請求額は毎月変わります。</small></div>
           <div class="field"><label for="insurance">年間の保険料 <span class="unit">1口あたり／円</span></label><input id="insurance" type="number" min="0" max="100000" step="100" value="960" inputmode="numeric"><small class="hint">初期値960円＝1口30,000円の3.2％。実際は年齢で変動し、募集価格の変更に自動連動しません。</small></div>
-          <div class="field"><label for="clubFee">クラブ月会費の扱い</label><select id="clubFee"><option value="0">含めない（0円）</option><option value="550" selected>新規出資による増額分（550円）</option><option value="1650">月会費全額（1,650円）</option></select><small class="hint">月会費は会員1人あたり。複数口でも重複計上しません。550円は既存会員の追加負担の例です。</small></div>
+          <div class="subhead">クラブの費用（会員1人あたり）</div>
+          <div class="field"><label for="clubFee">クラブ月会費 <span class="unit">1人あたり／円・月</span></label><input id="clubFee" type="number" min="0" max="20000" step="50" value="1650" inputmode="numeric"><small class="hint">所属クラブの月会費を入力。他クラブでも設定できます。</small></div>
+          <div class="field"><label for="feeMode">月会費を計算に含める方法</label><select id="feeMode"><option value="exclude">含めない（馬単独の収支）</option><option value="increment" selected>増額分だけ（追加出資の判断）</option><option value="full">月会費全額（家計全体の見方）</option></select></div>
+          <div class="field" id="existingFeeField"><label for="existingFee">現在支払っている月会費 <span class="unit">円／月</span></label><input id="existingFee" type="number" min="0" max="20000" step="50" value="1100" inputmode="numeric"><small class="hint">「増額分だけ」のとき、上の月会費との差額を計上します。</small></div>
+          <div class="callout" id="feeInfo" aria-live="polite">会費の計上額：月550円（増額分）</div>
           <div class="field"><label for="retention">賞金の想定分配率 <span class="unit">％</span></label><input id="retention" type="number" min="1" max="100" step="1" value="75" inputmode="numeric"><small class="hint">進上金20％・クラブ報酬5％を参考にした単純計算。源泉税・消費税精算・各種手当等は再現していません。</small></div>
         </div>
       </section>
@@ -96,19 +101,19 @@
           <div class="muted">出資金</div><div class="amount" id="bdPrice">—</div>
           <div class="muted">累計維持費</div><div class="amount" id="bdMaintain">—</div>
           <div class="muted">累計保険料（概算）</div><div class="amount" id="bdInsurance">—</div>
-          <div class="muted">クラブ月会費（指定分）</div><div class="amount" id="bdFee">—</div>
+          <div class="muted">クラブ月会費（計上分）</div><div class="amount" id="bdFee">—</div>
           <div class="total">合計</div><div class="amount total" id="bdTotal">—</div>
         </div>
       </section>
       <section class="panel pad" id="notes"><div class="section-head"><h2>この計算の前提と限界</h2></div>
         <div class="footnote">
-          <p><strong>これは判断材料を増やすための概算ツールです。利益・回収額を保証するものではありません。</strong> 初期設定はノルマンディーオーナーズクラブの公開情報を参考にしていますが、公式ツールではありません。</p>
+          <p><strong>これは判断材料を増やすための概算ツールです。利益・回収額を保証するものではありません。</strong> 初期設定はノルマンディーオーナーズクラブの公開情報を参考にしていますが、公式ツールではありません。他クラブでも会費等の数値を入力できますが、クラブ固有の規約すべてを再現するものではありません。</p>
           <ul>
             <li>費用は「出資金＋1口ごとの月額維持費×経過月数＋1口ごとの年額保険料×年数＋会員ごとの月会費×経過月数」で計算しています。維持費は<strong>2歳1月から</strong>と仮定し、各年を12か月で計算します。</li>
             <li>公式の維持費初回金は前払い・引退時精算の性質があるため、<strong>月額維持費との二重計上を避けて別途加算していません</strong>。実際の請求タイミングは再現していません。</li>
             <li>保険料の3.2％は2歳時の目安です。年齢別の変動を簡略化するため、年額固定の入力欄にしています。</li>
             <li>賞金分配率75％は進上金20％と営業者報酬5％の基本ケースから設定した<strong>仮の数字</strong>。特別出走手当・付加賞などは控除方法が異なり、源泉税、消費税精算、年次分配、引退精算、補助金・奨励金、牝馬買戻し代金、クラブポイント、割引、その他費用を正確に再現していません。</li>
-            <li>月会費は「1頭の費用」ではなく「会員の費用」。既存出資馬があるときの増分550円と、会費全額1,650円は異なる見方です。実際の条件に応じて選択してください。</li>
+            <li>月会費は「1頭の費用」ではなく「会員1人の費用」です。複数口でも1回のみ計上します。「増額分」は新しい会費と現在の会費の差（マイナスの場合は0円）、「全額」は指定した月会費を計上。「含めない」は月会費0円です。複数馬の収支を合算する際は会費の重複に注意してください。</li>
             <li>表は一定年齢の<strong>年末まで継続</strong>した仮想シナリオの比較。引退時期は出資者が自由に決定できるものではなく、賞金を予測する機能でもありません。</li>
           </ul>
           <strong>根拠となる公式案内：</strong><br>
@@ -123,15 +128,15 @@
 <script>
 (()=>{
   'use strict';
-  const fields=['totalPrice','shares','units','monthly','insurance','clubFee','retention','selectedAge','prize2','prize3','prize4','prize5','prize6','prize7'];
-  const initial={totalPrice:1200,shares:400,units:1,monthly:1200,insurance:960,clubFee:550,retention:75,selectedAge:5,prize2:0,prize3:600,prize4:800,prize5:800,prize6:600,prize7:500};
+  const fields=['totalPrice','shares','units','monthly','insurance','clubFee','feeMode','existingFee','retention','selectedAge','prize2','prize3','prize4','prize5','prize6','prize7'];
+  const initial={totalPrice:1200,shares:400,units:1,monthly:1200,insurance:960,clubFee:1650,feeMode:"increment",existingFee:1100,retention:75,selectedAge:5,prize2:0,prize3:600,prize4:800,prize5:800,prize6:600,prize7:500};
   const el=id=>document.getElementById(id);
   const fmt=(num,decimals=0)=>Number(num).toLocaleString('ja-JP',{minimumFractionDigits:decimals,maximumFractionDigits:decimals});
   const yen=n=>`${fmt(Math.round(n))}円`;
   const man=n=>`${fmt(Math.round(n))}万円`;
   const num=(id,min,max)=>{const val=Number(el(id).value);return Number.isFinite(val)?Math.min(max,Math.max(min,val)):min};
   const getInputs=()=>{
-    const d={totalPrice:num('totalPrice',100,200000),shares:num('shares',100,1000),units:num('units',1,1000),monthly:num('monthly',0,100000),insurance:num('insurance',0,100000),clubFee:num('clubFee',0,20000),retention:num('retention',1,100),selectedAge:num('selectedAge',3,7),prizes:{}};
+    const d={totalPrice:num('totalPrice',100,200000),shares:num('shares',100,1000),units:num('units',1,1000),monthly:num('monthly',0,100000),insurance:num('insurance',0,100000),clubFee:num('clubFee',0,20000),feeMode:el('feeMode').value,existingFee:num('existingFee',0,20000),retention:num('retention',1,100),selectedAge:num('selectedAge',3,7),prizes:{}};
     d.units=Math.min(Math.floor(d.units),d.shares);
     for(let age=2;age<=7;age++)d.prizes[age]=num(`prize${age}`,0,100000);
     return d;
@@ -147,7 +152,8 @@
       const years=age-1,months=years*12;
       const maintain=d.monthly*months*d.units;
       const insurance=d.insurance*years*d.units;
-      const club=d.clubFee*months;
+      const feePerMonth=d.feeMode==='full'?d.clubFee:d.feeMode==='increment'?Math.max(0,d.clubFee-d.existingFee):0;
+      const club=feePerMonth*months;
       const cost=purchase+maintain+insurance+club;
       const revenue=cumulativeGross*10000*(d.retention/100)*d.units/d.shares;
       const net=revenue-cost;
@@ -159,6 +165,9 @@
   function setText(id,value){el(id).textContent=value}
   function update(){
     const d=getInputs(),sim=simulate(d);
+    const feePerMonth=d.feeMode==='full'?d.clubFee:d.feeMode==='increment'?Math.max(0,d.clubFee-d.existingFee):0;
+    el('existingFeeField').hidden=d.feeMode!=='increment';
+    setText('feeInfo', '月会費の計上額：'+yen(feePerMonth)+'／月（'+(d.feeMode==='increment'?'差額分':d.feeMode==='full'?'会費全額':'計上なし')+'・会員1人あたり）');
     const current=sim.rows.find(r=>r.age===d.selectedAge)||sim.rows[2];
     setText('unitPrice',`1口の価格：${yen(sim.unitPrice)} ／ 出資金合計：${yen(current.purchase)}（${d.units}口）`);
     setText('ageLabel',`${current.age}歳末まで走る場合`);
@@ -189,7 +198,24 @@
   }
   let toastTimer;function notify(message){setText('toast',message);el('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el('toast').classList.remove('show'),3400)}
   function query(){const q=new URLSearchParams();for(const id of fields)q.set(id,el(id).value);return q.toString()}
-  function loadQuery(){const p=new URLSearchParams(location.search);for(const id of fields)if(p.has(id)){const field=el(id), val=p.get(id);if(field.tagName==='SELECT'){if([...field.options].some(opt=>opt.value===val))field.value=val}else if(val!==''&&Number.isFinite(Number(val)))field.value=val}}
+  function loadQuery(){
+    const p=new URLSearchParams(location.search);
+    for(const id of fields)if(p.has(id)){
+      const field=el(id),val=p.get(id);
+      if(field.tagName==='SELECT'){
+        if([...field.options].some(opt=>opt.value===val))field.value=val;
+      }else if(val!==''&&Number.isFinite(Number(val)))field.value=val;
+    }
+    // 旧Ver.0.1の共有URL（会費を0・550・1650円から選択）との互換性
+    if(p.has('clubFee')&&!p.has('feeMode')){
+      const old=Number(p.get('clubFee'));
+      if(Number.isFinite(old)&&old>=0){
+        if(old===0){el('feeMode').value='exclude';el('clubFee').value=0;}
+        else if(old===550){el('feeMode').value='increment';el('clubFee').value=1650;el('existingFee').value=1100;}
+        else {el('feeMode').value='full';el('clubFee').value=old;}
+      }
+    }
+  }
   async function copyLink(){
     if(location.protocol==='file:'){notify('URL共有はWeb公開後に利用できます。');return}
     const url=`${location.origin}${location.pathname}?${query()}`;
