@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="JRAの平地・2026年の着順別賞金を、年齢・クラス・出走成績から試算。無料の一口馬主向け賞金シミュレーターです。">
+<title>JRA賞金試算 2026｜ひとくち計算室</title>
+<style>
+:root{--ink:#19302b;--muted:#5c6c65;--green:#205746;--bg:#f6f6f1;--line:#dce3db;--card:#fff}
+*{box-sizing:border-box}body{background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;margin:0}
+button,input,select{font:inherit}input,select{background:#fff;border:1px solid #bccbc3;border-radius:7px;padding:8px;min-height:40px;color:var(--ink)}button{background:#fff;color:var(--green);border:1px solid #adbbb2;border-radius:8px;padding:8px 12px;font-weight:700;cursor:pointer}button:hover{background:#ecf4ef}button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #d2ab4e;outline-offset:2px}
+header{background:var(--green);color:#fff;padding:23px 0 31px}a{color:var(--green)}header a{color:#e4eae2}.wrap{max-width:1120px;margin:auto;padding:0 17px}header h1{font-size:clamp(26px,4vw,37px);line-height:1.35;margin:18px 0 6px}header p{color:#d5e2dc;margin:0;max-width:750px}
+main{padding-top:22px;padding-bottom:60px}.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:19px;margin-bottom:16px}.panel h2{font-size:18px;margin:0 0 10px}.muted{color:var(--muted);font-size:12px}.toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.toolbar>div{display:flex;flex-wrap:wrap;gap:8px}.primary{background:var(--green);color:#fff}.primary:hover{background:#163d31}.table-scroller{width:100%;overflow-x:auto;margin-top:12px}table{border-collapse:collapse;width:100%;font-size:13px}th{background:#f3f6f3;font-size:12px;font-weight:700;white-space:nowrap}th,td{border-bottom:1px solid #e2e9e3;padding:10px;text-align:right;white-space:nowrap}th:first-child,td:first-child{text-align:left}.row-list{display:grid;gap:11px}.race-row{border:1px solid var(--line);border-radius:10px;padding:13px}.race-top{display:flex;gap:10px;flex-wrap:wrap;align-items:end}.race-top label{display:grid;gap:5px;font-weight:700;font-size:12px}.race-top label select{min-width:100px}.race-top .cls{flex:1;min-width:175px}.race-top .cls select{width:100%}.tiny-button{padding:7px 10px;margin-left:auto}.counts{display:grid;grid-template-columns:repeat(10,minmax(54px,1fr));gap:8px;margin-top:12px}.counts label{display:grid;gap:4px;font-size:11px;text-align:center}.counts input{width:100%;min-width:0;text-align:center;padding:6px 3px}.hintline{font-size:12px;color:var(--muted);margin:10px 0 0}.settings{display:flex;flex-wrap:wrap;align-items:center;gap:14px}.settings label{display:flex;align-items:center;gap:7px}.settings input[type=checkbox]{min-height:0;width:17px;height:17px}.settings input[type=number]{width:84px}.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.stat{background:#f1f6f2;padding:13px;border-radius:9px}.stat strong{display:block;font-size:clamp(18px,3vw,25px);letter-spacing:-.035em}.stat span{font-size:12px;color:var(--muted)}.notice{background:#f6f7f4;border-left:3px solid #789a87;padding:9px 12px;font-size:13px}.notes{font-size:13px}.notes li{margin-bottom:7px}.footer{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:15px;margin-top:27px}#warning{color:#913f38;font-size:12px;font-weight:700}
+@media(max-width:700px){.panel{padding:14px}.stat-grid{grid-template-columns:1fr 1fr}.counts{grid-template-columns:repeat(5,minmax(0,1fr))}.race-top{gap:8px}.race-top .cls{min-width:100%;order:2}.race-top .tiny-button{order:1}.stat strong{font-size:19px}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a href="./">← ひとくち計算室に戻る</a><h1>JRA賞金試算 2026</h1><p>年齢・クラス・着順ごとの回数を入力して、競走馬が稼ぐ本賞金と出走奨励金を計算。クラブ分配を加える前の第一段階です。</p></div></header>
+<main class="wrap">
+<section class="panel">
+  <div class="toolbar"><div><h2 style="margin:0">年齢・クラス別の出走成績</h2></div><div><button type="button" id="add">＋行を追加</button><button type="button" id="reset">例に戻す</button></div></div>
+  <p class="muted">同じ年齢で途中昇級する場合は「行を追加」してクラスを分けます。一般競走・特別競走は区別しています。</p>
+  <div id="races" class="row-list"></div>
+  <p id="warning"></p>
+</section>
+<section class="panel">
+  <h2>計算に含める項目</h2>
+  <div class="settings">
+    <label><input type="checkbox" id="incentive" checked>6〜9着の出走奨励金</label>
+    <label><input type="checkbox" id="allowance">特別出走手当を仮加算</label>
+    <label>手当1走あたり <input type="number" id="allowanceMan" min="0" max="100" step="1" value="55"> 万円</label>
+  </div>
+  <p class="muted">特別出走手当は原則55万円ですが、年齢・距離・着差などで増減します。オンにしても一律単価の参考額です。賞金の種類ごとに分配・控除が違うため、クラブの手取り額にはまだ換算しません。</p>
+</section>
+<section class="panel">
+  <h2>試算結果</h2>
+  <div class="stat-grid">
+    <div class="stat"><span>合計出走</span><strong id="starts">—</strong></div>
+    <div class="stat"><span>1〜5着の本賞金</span><strong id="base">—</strong></div>
+    <div class="stat"><span>6〜9着の出走奨励金</span><strong id="bonus">—</strong></div>
+    <div class="stat"><span>合計（手当含む場合あり）</span><strong id="total">—</strong></div>
+  </div>
+  <div class="table-scroller"><table><thead><tr><th>年齢</th><th>出走数</th><th>本賞金</th><th>出走奨励金</th><th>仮の出走手当</th><th>年別合計</th><th>累計</th></tr></thead><tbody id="yearTable"></tbody></table></div>
+  <div class="toolbar" style="margin-top:16px"><p class="muted" style="margin:0">単位：万円。架空の出走例から自由に編集できます。</p><button id="csv" type="button">年齢別表をCSV保存</button></div>
+</section>
+<section class="panel notes">
+  <h2>計算の前提と限界</h2>
+  <div class="notice"><strong>これは2026年JRA平地の一般・特別競走の簡易試算です。</strong> 実際の払戻しや利益を保証するものではありません。</div>
+  <ul>
+    <li>本賞金：1着はJRA公式公表額。2〜5着は1着の40％・25％・15％・10％。</li>
+    <li>6〜9着の出走奨励金：1着賞金の8％・7％・6％・4％、1万円単位で四捨五入。大きな着差など、不交付条件はここでは判定しません。</li>
+    <li>10着以下は0円としています。オープン・重賞競走、障害競走、特定の特別賞金は今回の試算の対象外です。</li>
+    <li>特別出走手当、内国産馬奨励賞、内国産牝馬奨励賞、距離別出走奨励賞、付加賞、その他の条件付き賞金は正確には反映していません。</li>
+    <li>JRAの本賞金・出走奨励金は、クラブ分配後の出資者手取り額ではありません。「ひとくち計算室」本体の一律分配率に、そのまま合算しないでください。</li>
+    <li>レースの年度・開催時期や年齢区分により賞金は異なります。2026年の固定表であり2027年以降には自動対応しません。</li>
+  </ul>
+  <p><a href="https://www.jra.go.jp/owner/members/prize/" target="_blank" rel="noopener noreferrer">出典：JRA「賞金のしくみ」（公式）</a> ／ <a href="https://www.jra.go.jp/keiba/rules/class.html" target="_blank" rel="noopener noreferrer">JRA「レースのクラス分け」（公式）</a></p>
+</section>
+<div class="footer">© 2026 ひとくち計算室 ／ 非公式・登録不要・ブラウザ内で計算。出走データは外部送信しません。</div>
+</main>
+<script>
+(()=>{
+"use strict";
+const RATES=[1,.4,.25,.15,.1,.08,.07,.06,.04,0];
+const C=[
+{id:"2new",age:"2",text:"2歳・新馬（一般）",one:780},
+{id:"2loss",age:"2",text:"2歳・未勝利（一般）",one:590},
+{id:"2one",age:"2",text:"2歳・1勝（一般）",one:820},
+{id:"2oneSp",age:"2",text:"2歳・1勝（特別）",one:1140},
+{id:"3new",age:"3",text:"3歳・新馬（一般）",one:650},
+{id:"3lossSpring",age:"3",text:"3歳・未勝利（春季）",one:590},
+{id:"3lossOther",age:"3",text:"3歳・未勝利（春季以外）",one:580},
+{id:"3one",age:"3",text:"3歳限定・1勝（一般）",one:820},
+{id:"3oneSp",age:"3",text:"3歳限定・1勝（特別）",one:1140},
+{id:"3two",age:"3",text:"3歳限定・2勝（一般）",one:1110},
+{id:"3twoSp",age:"3",text:"3歳限定・2勝（特別）",one:1480},
+{id:"oldOne",age:"old",text:"3（4）歳以上・1勝（一般）",one:820},
+{id:"oldOneSp",age:"old",text:"3（4）歳以上・1勝（特別）",one:1140},
+{id:"oldTwo",age:"old",text:"3（4）歳以上・2勝（一般）",one:1190},
+{id:"oldTwoSp",age:"old",text:"3（4）歳以上・2勝（特別）",one:1580},
+{id:"oldThree",age:"old",text:"3（4）歳以上・3勝（一般）",one:1810},
+{id:"oldThreeSp",age:"old",text:"3（4）歳以上・3勝（特別）",one:1870}
+];
+const $=id=>document.getElementById(id), yenMan=n=>n.toLocaleString("ja-JP",{maximumFractionDigits:2})+"万円";
+const defaultRows=[
+ {age:3,cls:"3lossOther",counts:[1,1,1,1,0,0,0,0,0,2]},
+ {age:4,cls:"oldOne",counts:[1,1,0,1,1,0,0,0,0,1]},
+ {age:5,cls:"oldTwo",counts:[0,1,1,2,2,0,0,0,0,2]},
+ {age:6,cls:"oldTwo",counts:[0,1,1,2,2,0,0,0,0,2]}
+];
+let rows=JSON.parse(JSON.stringify(defaultRows));
+let lastYears=[];
+const allowed=(r,age)=>r.age==="old"?age>=3:r.age===String(age);
+const choices=age=>C.filter(x=>allowed(x,age));
+function render(){
+ const parent=$("races");parent.replaceChildren();
+ rows.forEach((r,i)=>{
+  const block=document.createElement("div");block.className="race-row";
+  const top=document.createElement("div");top.className="race-top";
+  const ageLabel=document.createElement("label");ageLabel.textContent="年齢";
+  const ageSelect=document.createElement("select");
+  for(let a=2;a<=7;a++){let o=document.createElement("option");o.value=String(a);o.textContent=a+"歳";ageSelect.append(o)}
+  ageSelect.value=String(r.age);
+  ageSelect.addEventListener("change",()=>{r.age=Number(ageSelect.value);if(!allowed(C.find(x=>x.id===r.cls),r.age)){r.cls=(choices(r.age)[0]||C[0]).id}render()});
+  ageLabel.append(ageSelect);top.append(ageLabel);
+  const clsLabel=document.createElement("label");clsLabel.className="cls";clsLabel.textContent="競走条件";
+  const clsSelect=document.createElement("select");
+  for(const item of choices(r.age)){const opt=document.createElement("option");opt.value=item.id;opt.textContent=item.text;clsSelect.append(opt)}
+  clsSelect.value=r.cls;
+  clsSelect.addEventListener("change",()=>{r.cls=clsSelect.value;calculate()});
+  clsLabel.append(clsSelect);top.append(clsLabel);
+  const del=document.createElement("button");del.type="button";del.className="tiny-button";del.textContent="削除";del.disabled=rows.length<=1;
+  del.addEventListener("click",()=>{rows.splice(i,1);render()});top.append(del);
+  block.append(top);
+  const countGrid=document.createElement("div");countGrid.className="counts";
+  const labs=["1着","2着","3着","4着","5着","6着","7着","8着","9着","10着以下"];
+  labs.forEach((lab,k)=>{
+    const wrap=document.createElement("label");wrap.textContent=lab;
+    const input=document.createElement("input");input.type="number";input.min="0";input.max="100";input.step="1";input.inputMode="numeric";input.value=String(r.counts[k]);
+    input.setAttribute("aria-label",r.age+"歳 "+lab+"の回数");
+    input.addEventListener("input",()=>{
+      const v=Number(input.value);r.counts[k]=Number.isFinite(v)?Math.min(100,Math.max(0,Math.trunc(v))):0;calculate()
+    });wrap.append(input);countGrid.append(wrap);
+  });
+  block.append(countGrid);parent.append(block);
+ });
+ calculate();
+}
+function calculate(){
+ const records=[];let totalStarts=0,totalMain=0,totalExtra=0,totalAllowance=0;
+ const useIncentive=$("incentive").checked, useAllowance=$("allowance").checked;
+ const perStart=Math.min(100,Math.max(0,Number($("allowanceMan").value)||0));
+ let winningRows=0;
+ for(const r of rows){
+  const def=C.find(x=>x.id===r.cls);if(!def)continue;
+  const starts=r.counts.reduce((s,v)=>s+v,0);
+  const main=r.counts.slice(0,5).reduce((s,n,i)=>s+n*def.one*RATES[i],0);
+  const bonus=useIncentive?r.counts.slice(5,9).reduce((s,n,i)=>s+n*Math.round(def.one*RATES[i+5]),0):0;
+  const allowance=useAllowance?starts*perStart:0;
+  winningRows+=r.counts[0]||0;
+  records.push({age:r.age,starts,main,bonus,allowance,total:main+bonus+allowance});
+  totalStarts+=starts;totalMain+=main;totalExtra+=bonus;totalAllowance+=allowance;
+ }
+ $("starts").textContent=totalStarts+"戦";
+ $("base").textContent=yenMan(totalMain);
+ $("bonus").textContent=yenMan(totalExtra);
+ $("total").textContent=yenMan(totalMain+totalExtra+totalAllowance);
+ const grouped=new Map();
+ for(let a=2;a<=7;a++)grouped.set(a,{age:a,starts:0,main:0,bonus:0,allowance:0,total:0});
+ for(const r of records){const x=grouped.get(r.age);for(const k of ["starts","main","bonus","allowance","total"])x[k]+=r[k]}
+ let cumulative=0;lastYears=[];
+ const body=$("yearTable");body.replaceChildren();
+ for(const x of grouped.values()){
+   if(!x.starts)continue;
+   cumulative+=x.total;lastYears.push({...x,cumulative});
+   const tr=document.createElement("tr");
+   [x.age+"歳",x.starts+"戦",yenMan(x.main),yenMan(x.bonus),yenMan(x.allowance),yenMan(x.total),yenMan(cumulative)].forEach(v=>{const td=document.createElement("td");td.textContent=v;tr.append(td)});
+   body.append(tr);
+ }
+ $("warning").textContent=winningRows>2?"注意：勝利による昇級と入力クラスの整合性は、自動判定していません。":"";
+}
+$("add").addEventListener("click",()=>{rows.push({age:5,cls:"oldTwo",counts:Array(10).fill(0)});render()});
+$("reset").addEventListener("click",()=>{rows=JSON.parse(JSON.stringify(defaultRows));$("incentive").checked=true;$("allowance").checked=false;$("allowanceMan").value=55;render()});
+["incentive","allowance","allowanceMan"].forEach(id=>$(id).addEventListener("input",calculate));
+$("csv").addEventListener("click",()=>{
+ const data=[["年齢","出走数","本賞金(万円)","出走奨励金(万円)","仮の出走手当(万円)","合計(万円)","累計(万円)"]];
+ for(const r of lastYears)data.push([r.age,r.starts,r.main,r.bonus,r.allowance,r.total,r.cumulative]);
+ const csv="\ufeff"+data.map(row=>row.map(cell=>'"'+String(cell).replace(/"/g,'""')+'"').join(",")).join("\r\n");
+ const blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob);
+ const anchor=document.createElement("a");anchor.href=url;anchor.download="jra-2026-nenreihyou.csv";document.body.append(anchor);anchor.click();anchor.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+});
+window.HitokuchiJRA={RATES,C,calculate,readRows:()=>JSON.parse(JSON.stringify(rows))};
+render();
+})();
+</script>
+</body></html>
