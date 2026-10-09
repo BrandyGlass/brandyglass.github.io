@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#183a34">
+  <meta name="description" content="募集総額・維持費・現役年数から、一口馬主の損益分岐点を無料で概算。年齢別の収支がひと目でわかる、登録不要のシミュレーター。">
+  <title>ひとくち計算室｜一口馬主の損益分岐点シミュレーター</title>
+  <style>
+    :root{color-scheme:light;--forest:#173e37;--forest-2:#275c4c;--ink:#202d28;--secondary:#606e68;--warm:#f7f6f0;--panel:#fff;--line:#dce3db;--green-bg:#e8f4eb;--red:#a54244;--red-bg:#fff0ef;--gold:#b58a46;--shadow:0 12px 44px rgba(26,60,46,.055)}
+    *{box-sizing:border-box} html{scroll-behavior:smooth}body{margin:0;color:var(--ink);background:var(--warm);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;line-height:1.65;font-variant-numeric:tabular-nums}
+    a{color:var(--forest-2)} a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #d09e40;outline-offset:3px}
+    .shell{max-width:1200px;margin:0 auto;padding:0 23px}.mast{background:var(--forest);color:white}.nav{min-height:67px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid rgba(255,255,255,.13)}
+    .brand{font-size:17px;font-weight:800;letter-spacing:.06em}.brand-mark{display:inline-block;width:21px;height:21px;background:#d1bc83;border-radius:50%;vertical-align:-5px;margin-right:8px;box-shadow:inset -7px 0 rgba(23,62,55,.8)}.nav small{color:#b9d0c9;font-size:12px}
+    .hero{padding:48px 0 50px;display:flex;align-items:flex-end;justify-content:space-between;gap:22px}.eyebrow{color:#c3d5aa;font-size:12px;letter-spacing:.14em;font-weight:700}.hero h1{font-size:clamp(29px,4vw,45px);letter-spacing:-.05em;line-height:1.4;margin:10px 0 11px;font-weight:800}.hero p{color:#d2e2dc;max-width:740px;margin:0;font-size:15px}.hero-note{flex-shrink:0;border:1px solid #729388;border-radius:9px;color:#d9e8e1;font-size:12px;padding:9px 13px}
+    .main{padding:27px 0 55px}.layout{display:grid;grid-template-columns:minmax(275px,365px) minmax(0,1fr);gap:22px;align-items:start}.stack{display:grid;gap:18px}
+    .panel{background:var(--panel);border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow);overflow:hidden}.pad{padding:22px}.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:17px}.section-head h2{font-size:17px;line-height:1.45;margin:0;font-weight:800;letter-spacing:-.025em}.section-head .num{background:#eaf0eb;color:var(--forest-2);border-radius:7px;padding:2px 7px;font-size:11px;font-weight:800}
+    .fields{display:grid;gap:17px}.field label{font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:8px}.unit{font-weight:500;color:var(--secondary);font-size:12px}.field input,.field select,.prize-field input{width:100%;font:inherit;font-size:16px;color:var(--ink);border:1px solid #c9d3cd;border-radius:9px;background:#fff;min-height:45px;padding:9px 12px;transition:border-color .15s}.field input:hover,.field select:hover{border-color:#6b9184}.field .hint{display:block;color:var(--secondary);font-size:11px;margin-top:5px;line-height:1.55}.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.subhead{color:var(--secondary);font-weight:800;letter-spacing:.1em;font-size:11px;margin:9px 0 -3px}
+    .button-row{display:flex;gap:9px;flex-wrap:wrap}.btn{border:1px solid #ccd7cf;background:#fff;border-radius:9px;color:var(--forest);font-size:13px;min-height:39px;padding:8px 12px;cursor:pointer;font-weight:700}.btn:hover{border-color:var(--forest-2);background:#f1f6f1}.btn.primary{background:var(--forest);color:white;border-color:var(--forest)}.btn.primary:hover{background:#275c4c}.btn:disabled{opacity:.45;cursor:not-allowed}
+    .surface-tint{background:linear-gradient(120deg,#ecf3ed,#f9f8f3);border-bottom:1px solid var(--line)}.focus-tag{display:inline-flex;align-items:center;gap:6px;background:#dce9df;color:var(--forest);padding:3px 9px;font-size:11px;font-weight:800;border-radius:99px}
+    .hero-result{padding:22px 24px 21px}.summary-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.overline{color:var(--secondary);font-size:12px;font-weight:700;letter-spacing:.01em}.huge{color:var(--forest);font-size:clamp(30px,3.9vw,44px);line-height:1.25;letter-spacing:-.06em;font-weight:850;margin:6px 0 2px}.small-note{font-size:11px;color:var(--secondary);margin:0}.status{font-size:11px;font-weight:800;padding:4px 9px;border-radius:99px;background:#f1e6dc;color:#835c2b;white-space:nowrap}.status.positive{background:#ddede2;color:#28654b}.stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border-top:1px solid var(--line)}.stat{background:white;padding:16px 18px}.stat .name{color:var(--secondary);font-size:11px}.stat .value{font-weight:800;font-size:clamp(17px,2.3vw,25px);letter-spacing:-.04em;margin:4px 0 0;white-space:nowrap}.negative{color:var(--red)!important}.positive-text{color:#236d4e!important}
+    .meter{height:9px;border-radius:9px;background:#d4e0d8;overflow:hidden;margin:16px 0 7px}.meter-fill{background:#3c8470;height:100%;width:0;transition:width .24s}.comparison{display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--secondary)}
+    .table-wrap{width:100%;overflow-x:auto}.results-table{border-collapse:collapse;min-width:680px;width:100%;font-size:13px}.results-table th{background:#f5f8f5;color:#5e6b65;white-space:nowrap;font-size:11px;font-weight:750;padding:12px 10px;text-align:right;border-bottom:1px solid var(--line)}.results-table td{padding:15px 10px;text-align:right;border-bottom:1px solid #e9eeea;white-space:nowrap}.results-table td:first-child,.results-table th:first-child{text-align:left;padding-left:21px;position:sticky;left:0;z-index:1;background:inherit}.results-table tbody tr{background:white}.results-table tbody tr:hover{background:#f8faf6}.results-table tbody tr.active{background:#edf5ef}.results-table tbody tr:last-child td{border-bottom:0}.results-table .em{font-weight:850}.table-foot{padding:12px 20px;border-top:1px solid var(--line);background:#fbfcfa;font-size:12px;color:var(--secondary)}
+    .prize-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.prize-field label{display:block;font-size:12px;font-weight:750;margin-bottom:5px}.prize-field input{height:44px;min-height:unset}.prize-field .suffix{font-size:11px;color:var(--secondary);margin-top:3px}.callout{padding:12px 15px;border-radius:10px;background:#f2f7f3;border:1px solid #e0e9e1;color:#3d5c50;font-size:12px;line-height:1.75}.breakdown{display:grid;grid-template-columns:1fr auto;row-gap:11px;column-gap:10px;font-size:13px}.breakdown .muted{color:var(--secondary)}.breakdown .amount{text-align:right;font-weight:750}.breakdown .total{padding-top:11px;border-top:1px solid var(--line);font-weight:850;font-size:16px}.footnote{color:var(--secondary);font-size:12px;line-height:1.85;margin:0}.footnote ul{padding-left:19px;margin:8px 0 13px}.footnote li{margin-bottom:5px}.controls{padding-top:6px;display:flex;gap:8px;flex-wrap:wrap}.tiny{font-size:11px;color:var(--secondary)}
+    footer{padding:25px 0 40px;border-top:1px solid var(--line);font-size:12px;color:var(--secondary);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(15px);opacity:0;pointer-events:none;background:var(--forest);color:white;padding:10px 17px;border-radius:9px;font-size:13px;box-shadow:0 10px 30px #3334;transition:.2s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    @media(max-width:900px){.layout{grid-template-columns:1fr}.left{display:grid;grid-template-columns:1fr 1fr;align-items:start;gap:18px}.left .panel:last-child{grid-column:1/-1}.hero-note{display:none}}
+    @media(max-width:600px){.shell{padding:0 14px}.hero{padding:32px 0 34px}.hero h1{font-size:30px}.hero p{font-size:13px}.nav{min-height:56px}.nav small{font-size:10px}.main{padding-top:16px}.layout,.stack,.left{display:grid;grid-template-columns:1fr;gap:14px}.left .panel:last-child{grid-column:auto}.pad{padding:17px}.hero-result{padding:20px 18px}.stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.stat:last-child{grid-column:1/-1}.stat{padding:13px 16px}.stat .value{font-size:21px}.prize-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.prize-field input{padding:8px;font-size:15px}.results-table th:first-child,.results-table td:first-child{padding-left:15px}.footer{padding:20px 0}.table-wrap{scrollbar-width:thin}}
+    @media print{body{background:white}.mast{color:#111;background:white}.nav,.hero-note,.controls,.button-row,.left,.input-only,.toast{display:none!important}.hero{padding:6px 0 8px}.hero p{color:#333}.hero h1{font-size:25px}.layout{display:block}.panel{box-shadow:none;break-inside:avoid;margin-bottom:12px}.table-wrap{overflow:visible}.results-table{min-width:0;font-size:10px}.results-table th,.results-table td{padding:8px 5px}.results-table th:first-child,.results-table td:first-child{padding-left:7px}.main{padding-top:4px}}
+  </style>
+</head>
+<body>
+<header class="mast">
+  <div class="shell">
+    <div class="nav"><div class="brand"><span class="brand-mark" aria-hidden="true"></span>ひとくち計算室</div><small>無料・登録不要・すべて概算</small></div>
+    <div class="hero">
+      <div><div class="eyebrow">OWNERSHIP COST CALCULATOR</div><h1>この馬、いくら稼げば<br>元が取れる？</h1><p>出資金だけでは見えない、一口馬主のお金の話。<br>維持費・会費・引退年齢を変えて、損益分岐点を表で比べよう。</p></div>
+      <div class="hero-note">2026年10月版 ／ ノルマンディー参考設定</div>
+    </div>
+  </div>
+</header>
+<main class="shell main">
+  <div class="layout">
+    <aside class="left stack" aria-label="計算条件">
+      <section class="panel pad"><div class="section-head"><h2>馬と出資の条件</h2><span class="num">01</span></div>
+        <div class="fields">
+          <div class="field"><label for="totalPrice">募集総額 <span class="unit">万円</span></label><input id="totalPrice" type="number" min="100" max="200000" step="10" value="1200" inputmode="decimal"></div>
+          <div class="field-grid">
+            <div class="field"><label for="shares">募集口数</label><select id="shares"><option value="100">100口</option><option value="200">200口</option><option value="300">300口</option><option value="400" selected>400口</option><option value="500">500口</option><option value="1000">1,000口</option></select></div>
+            <div class="field"><label for="units">自分の出資口数</label><input id="units" type="number" min="1" max="1000" step="1" value="1" inputmode="numeric"></div>
+          </div>
+          <div class="callout" id="unitPrice" aria-live="polite">1口の価格：30,000円</div>
+        </div>
+      </section>
+      <section class="panel pad"><div class="section-head"><h2>毎年かかるお金</h2><span class="num">02</span></div>
+        <div class="fields">
+          <div class="field"><label for="monthly">毎月の維持費 <span class="unit">1口あたり／円</span></label><input id="monthly" type="number" min="0" max="100000" step="100" value="1200" inputmode="numeric"><small class="hint">平均額として一律計算。実際の請求額は毎月変わります。</small></div>
+          <div class="field"><label for="insurance">年間の保険料 <span class="unit">1口あたり／円</span></label><input id="insurance" type="number" min="0" max="100000" step="100" value="960" inputmode="numeric"><small class="hint">初期値960円＝1口30,000円の3.2％。実際は年齢で変動し、募集価格の変更に自動連動しません。</small></div>
+          <div class="field"><label for="clubFee">クラブ月会費の扱い</label><select id="clubFee"><option value="0">含めない（0円）</option><option value="550" selected>新規出資による増額分（550円）</option><option value="1650">月会費全額（1,650円）</option></select><small class="hint">月会費は会員1人あたり。複数口でも重複計上しません。550円は既存会員の追加負担の例です。</small></div>
+          <div class="field"><label for="retention">賞金の想定分配率 <span class="unit">％</span></label><input id="retention" type="number" min="1" max="100" step="1" value="75" inputmode="numeric"><small class="hint">進上金20％・クラブ報酬5％を参考にした単純計算。源泉税・消費税精算・各種手当等は再現していません。</small></div>
+        </div>
+      </section>
+      <section class="panel pad"><div class="section-head"><h2>操作</h2><span class="num">03</span></div>
+        <div class="button-row"><button class="btn primary" type="button" id="shareLink">この条件のURLをコピー</button><button class="btn" type="button" id="reset">初期値に戻す</button></div>
+        <p class="tiny">公開サイトでは条件付きURLを共有できます。個人情報は入力不要です。</p>
+      </section>
+    </aside>
+
+    <div class="stack">
+      <section class="panel" aria-label="損益サマリー">
+        <div class="surface-tint hero-result">
+          <div class="summary-top"><div><span class="focus-tag" id="ageLabel">5歳末まで走る場合</span><div class="overline" style="margin-top:13px">元を取るために必要な馬の累計獲得賞金</div><div class="huge" id="breakEven">—</div><p class="small-note">本賞金などを一律の分配率で概算した金額です</p></div><span class="status" id="status">試算中</span></div>
+          <div class="meter" aria-hidden="true"><div class="meter-fill" id="progressBar"></div></div>
+          <div class="comparison"><span id="earnedLabel">入力した想定賞金：—</span><span id="goalLabel">損益分岐：—</span></div>
+          <div class="field" style="margin-top:15px;max-width:195px"><label for="selectedAge">比較したい引退年齢</label><select id="selectedAge"><option value="3">3歳末</option><option value="4">4歳末</option><option value="5" selected>5歳末</option><option value="6">6歳末</option><option value="7">7歳末</option></select></div>
+        </div>
+        <div class="stat-grid"><div class="stat"><div class="name">累計負担額（自分）</div><div class="value" id="totalCost">—</div></div><div class="stat"><div class="name">想定分配額（自分）</div><div class="value" id="totalReturn">—</div></div><div class="stat"><div class="name">収支 ／ 回収率</div><div class="value" id="netResult">—</div><div class="small-note" id="roiResult">—</div></div></div>
+      </section>
+      <section class="panel"><div class="pad" style="padding-bottom:8px"><div class="section-head" style="margin-bottom:5px"><h2>年齢別・損益比較表</h2><span class="num">まとめて比較</span></div><p class="footnote">行をタップすると上の結果が切り替わります。表は横にスクロールできます。</p></div>
+        <div class="table-wrap"><table class="results-table" id="resultTable"><thead><tr><th scope="col">引退時期</th><th scope="col">累計獲得賞金<br>（馬全体）</th><th scope="col">累計負担額<br>（自分）</th><th scope="col">想定分配額<br>（自分）</th><th scope="col">収支</th><th scope="col">回収率</th><th scope="col">黒字に必要な<br>馬の賞金</th></tr></thead><tbody id="tableBody"></tbody></table></div>
+        <div class="table-foot"><button id="exportCSV" type="button" class="btn">比較表をCSV保存</button><span style="margin-left:10px">※試算値。確定精算額ではありません。</span></div>
+      </section>
+      <section class="panel pad input-only"><div class="section-head"><h2>年齢ごとの想定獲得賞金</h2><span class="num">04</span></div>
+        <p class="footnote" style="margin:-6px 0 14px">馬全体が各年に獲得する賞金を入力（万円）。下の表は各年までの合計で計算します。初期値は説明用の架空例です。</p>
+        <div class="prize-grid">
+          <div class="prize-field"><label for="prize2">2歳</label><input id="prize2" type="number" min="0" max="100000" step="100" value="0" inputmode="decimal"><div class="suffix">万円／年</div></div>
+          <div class="prize-field"><label for="prize3">3歳</label><input id="prize3" type="number" min="0" max="100000" step="100" value="600" inputmode="decimal"><div class="suffix">万円／年</div></div>
+          <div class="prize-field"><label for="prize4">4歳</label><input id="prize4" type="number" min="0" max="100000" step="100" value="800" inputmode="decimal"><div class="suffix">万円／年</div></div>
+          <div class="prize-field"><label for="prize5">5歳</label><input id="prize5" type="number" min="0" max="100000" step="100" value="800" inputmode="decimal"><div class="suffix">万円／年</div></div>
+          <div class="prize-field"><label for="prize6">6歳</label><input id="prize6" type="number" min="0" max="100000" step="100" value="600" inputmode="decimal"><div class="suffix">万円／年</div></div>
+          <div class="prize-field"><label for="prize7">7歳</label><input id="prize7" type="number" min="0" max="100000" step="100" value="500" inputmode="decimal"><div class="suffix">万円／年</div></div>
+        </div>
+        <div class="button-row" style="margin-top:17px"><button type="button" class="btn" data-prize-preset="0">賞金ゼロ</button><button type="button" class="btn" data-prize-preset="2000">総賞金2,000万円の例</button><button type="button" class="btn" data-prize-preset="6000">総賞金6,000万円の例</button></div>
+      </section>
+      <section class="panel pad"><div class="section-head"><h2>負担額の内訳</h2><span class="num" id="detailAge">5歳末</span></div>
+        <div class="breakdown" id="breakdown">
+          <div class="muted">出資金</div><div class="amount" id="bdPrice">—</div>
+          <div class="muted">累計維持費</div><div class="amount" id="bdMaintain">—</div>
+          <div class="muted">累計保険料（概算）</div><div class="amount" id="bdInsurance">—</div>
+          <div class="muted">クラブ月会費（指定分）</div><div class="amount" id="bdFee">—</div>
+          <div class="total">合計</div><div class="amount total" id="bdTotal">—</div>
+        </div>
+      </section>
+      <section class="panel pad" id="notes"><div class="section-head"><h2>この計算の前提と限界</h2></div>
+        <div class="footnote">
+          <p><strong>これは判断材料を増やすための概算ツールです。利益・回収額を保証するものではありません。</strong> 初期設定はノルマンディーオーナーズクラブの公開情報を参考にしていますが、公式ツールではありません。</p>
+          <ul>
+            <li>費用は「出資金＋1口ごとの月額維持費×経過月数＋1口ごとの年額保険料×年数＋会員ごとの月会費×経過月数」で計算しています。維持費は<strong>2歳1月から</strong>と仮定し、各年を12か月で計算します。</li>
+            <li>公式の維持費初回金は前払い・引退時精算の性質があるため、<strong>月額維持費との二重計上を避けて別途加算していません</strong>。実際の請求タイミングは再現していません。</li>
+            <li>保険料の3.2％は2歳時の目安です。年齢別の変動を簡略化するため、年額固定の入力欄にしています。</li>
+            <li>賞金分配率75％は進上金20％と営業者報酬5％の基本ケースから設定した<strong>仮の数字</strong>。特別出走手当・付加賞などは控除方法が異なり、源泉税、消費税精算、年次分配、引退精算、補助金・奨励金、牝馬買戻し代金、クラブポイント、割引、その他費用を正確に再現していません。</li>
+            <li>月会費は「1頭の費用」ではなく「会員の費用」。既存出資馬があるときの増分550円と、会費全額1,650円は異なる見方です。実際の条件に応じて選択してください。</li>
+            <li>表は一定年齢の<strong>年末まで継続</strong>した仮想シナリオの比較。引退時期は出資者が自由に決定できるものではなく、賞金を予測する機能でもありません。</li>
+          </ul>
+          <strong>根拠となる公式案内：</strong><br>
+          <a href="https://www.normandyoc.com/club/cost.html" target="_blank" rel="noopener noreferrer">必要費用（ノルマンディー公式）</a> ／ <a href="https://www.normandyoc.com/club/share.html" target="_blank" rel="noopener noreferrer">分配について（公式）</a> ／ <a href="https://www.normandyoc.com/support/faq.html" target="_blank" rel="noopener noreferrer">FAQ（公式）</a>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+<div class="shell"><footer><span>© 2026 ひとくち計算室 ／ 個人制作・非公式</span><span>入力した数字はブラウザ内で計算されます。サーバー送信・外部計測なし。</span></footer></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(()=>{
+  'use strict';
+  const fields=['totalPrice','shares','units','monthly','insurance','clubFee','retention','selectedAge','prize2','prize3','prize4','prize5','prize6','prize7'];
+  const initial={totalPrice:1200,shares:400,units:1,monthly:1200,insurance:960,clubFee:550,retention:75,selectedAge:5,prize2:0,prize3:600,prize4:800,prize5:800,prize6:600,prize7:500};
+  const el=id=>document.getElementById(id);
+  const fmt=(num,decimals=0)=>Number(num).toLocaleString('ja-JP',{minimumFractionDigits:decimals,maximumFractionDigits:decimals});
+  const yen=n=>`${fmt(Math.round(n))}円`;
+  const man=n=>`${fmt(Math.round(n))}万円`;
+  const num=(id,min,max)=>{const val=Number(el(id).value);return Number.isFinite(val)?Math.min(max,Math.max(min,val)):min};
+  const getInputs=()=>{
+    const d={totalPrice:num('totalPrice',100,200000),shares:num('shares',100,1000),units:num('units',1,1000),monthly:num('monthly',0,100000),insurance:num('insurance',0,100000),clubFee:num('clubFee',0,20000),retention:num('retention',1,100),selectedAge:num('selectedAge',3,7),prizes:{}};
+    d.units=Math.min(Math.floor(d.units),d.shares);
+    for(let age=2;age<=7;age++)d.prizes[age]=num(`prize${age}`,0,100000);
+    return d;
+  };
+  function simulate(d){
+    const unitPrice=d.totalPrice*10000/d.shares;
+    const purchase=unitPrice*d.units;
+    const result=[];
+    let cumulativeGross=0;
+    for(let age=2;age<=7;age++){
+      cumulativeGross+=d.prizes[age];
+      if(age<3)continue;
+      const years=age-1,months=years*12;
+      const maintain=d.monthly*months*d.units;
+      const insurance=d.insurance*years*d.units;
+      const club=d.clubFee*months;
+      const cost=purchase+maintain+insurance+club;
+      const revenue=cumulativeGross*10000*(d.retention/100)*d.units/d.shares;
+      const net=revenue-cost;
+      const requiredGross=cost*d.shares/(d.retention/100)/d.units/10000;
+      result.push({age,years,months,cumulativeGross,purchase,maintain,insurance,club,cost,revenue,net,roi:cost>0?100*revenue/cost:0,requiredGross});
+    }
+    return {unitPrice,rows:result};
+  }
+  function setText(id,value){el(id).textContent=value}
+  function update(){
+    const d=getInputs(),sim=simulate(d);
+    const current=sim.rows.find(r=>r.age===d.selectedAge)||sim.rows[2];
+    setText('unitPrice',`1口の価格：${yen(sim.unitPrice)} ／ 出資金合計：${yen(current.purchase)}（${d.units}口）`);
+    setText('ageLabel',`${current.age}歳末まで走る場合`);
+    setText('breakEven',man(Math.ceil(current.requiredGross)));
+    setText('totalCost',yen(current.cost));
+    setText('totalReturn',yen(current.revenue));
+    setText('netResult',`${current.net>0?'+':''}${yen(current.net)}`);
+    setText('roiResult',`回収率 ${fmt(current.roi,1)}％`);
+    setText('earnedLabel',`想定賞金 ${man(current.cumulativeGross)}`);
+    setText('goalLabel',`必要賞金 約${man(Math.ceil(current.requiredGross))}`);
+    setText('detailAge',`${current.age}歳末`);
+    setText('bdPrice',yen(current.purchase));setText('bdMaintain',yen(current.maintain));setText('bdInsurance',yen(current.insurance));setText('bdFee',yen(current.club));setText('bdTotal',yen(current.cost));
+    el('netResult').className=`value ${current.net>=0?'positive-text':'negative'}`;
+    el('status').className=`status ${current.net>=0?'positive':''}`;
+    setText('status',current.net>=0?'黒字の試算':'赤字の試算');
+    el('progressBar').style.width=`${Math.min(100,Math.max(0,current.cumulativeGross/current.requiredGross*100))}%`;
+    const tbody=el('tableBody');tbody.replaceChildren();
+    for(const r of sim.rows){
+      const tr=document.createElement('tr');if(r.age===d.selectedAge)tr.className='active';
+      tr.tabIndex=0;tr.setAttribute('aria-label',`${r.age}歳末の結果を表示`);
+      const texts=[`${r.age}歳末`,man(r.cumulativeGross),yen(r.cost),yen(r.revenue),`${r.net>0?'+':''}${yen(r.net)}`,`${fmt(r.roi,1)}%`,man(Math.ceil(r.requiredGross))];
+      texts.forEach((v,i)=>{const td=document.createElement('td');td.textContent=v;if(i===0||i===4||i===6)td.classList.add('em');if(i===4)td.classList.add(r.net>=0?'positive-text':'negative');tr.appendChild(td)});
+      tr.addEventListener('click',()=>{el('selectedAge').value=r.age;update()});
+      tr.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el('selectedAge').value=r.age;update()}});
+      tbody.appendChild(tr);
+    }
+    return {d,sim};
+  }
+  let toastTimer;function notify(message){setText('toast',message);el('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el('toast').classList.remove('show'),3400)}
+  function query(){const q=new URLSearchParams();for(const id of fields)q.set(id,el(id).value);return q.toString()}
+  function loadQuery(){const p=new URLSearchParams(location.search);for(const id of fields)if(p.has(id)){const field=el(id), val=p.get(id);if(field.tagName==='SELECT'){if([...field.options].some(opt=>opt.value===val))field.value=val}else if(val!==''&&Number.isFinite(Number(val)))field.value=val}}
+  async function copyLink(){
+    if(location.protocol==='file:'){notify('URL共有はWeb公開後に利用できます。');return}
+    const url=`${location.origin}${location.pathname}?${query()}`;
+    try{await navigator.clipboard.writeText(url);notify('計算条件付きURLをコピーしました')}catch{window.prompt('このURLをコピーしてください',url)}
+  }
+  function escapeCSV(s){return `"${String(s).replace(/"/g,'""')}"`}
+  function csvDownload(){
+    const {sim}=update();const data=[['引退時期','累計獲得賞金（馬全体・万円）','累計負担額（自分・円）','分配額（自分・円）','収支（円）','回収率（％）','損益分岐賞金（万円）']];
+    for(const r of sim.rows)data.push([`${r.age}歳末`,Math.round(r.cumulativeGross),Math.round(r.cost),Math.round(r.revenue),Math.round(r.net),Number(r.roi.toFixed(1)),Math.ceil(r.requiredGross)]);
+    data.push(['注','公式精算を再現しない概算値']);
+    const csv='\ufeff'+data.map(row=>row.map(escapeCSV).join(',')).join('\r\n');
+    const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='hitokuchi-hikaku.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);notify('比較表をCSV保存しました');
+  }
+  fields.forEach(id=>el(id).addEventListener('input',update));
+  document.querySelectorAll('[data-prize-preset]').forEach(button=>button.addEventListener('click',()=>{
+    const total=Number(button.dataset.prizePreset),weights=[0,.19,.25,.25,.19,.12];
+    for(let age=2;age<=7;age++)el(`prize${age}`).value=Math.round(total*weights[age-2]);
+    update();
+  }));
+  el('reset').addEventListener('click',()=>{for(const [id,value] of Object.entries(initial))el(id).value=value;update();notify('初期値に戻しました')});
+  el('shareLink').addEventListener('click',copyLink);
+  el('exportCSV').addEventListener('click',csvDownload);
+  loadQuery();update();
+  // 手動テストしやすいよう計算結果を外部へ公開（個人情報の送信なし）
+  window.HitokuchiCalculator={simulate,getInputs,update};
+})();
+</script>
+</body>
+</html>
