@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0c1227" />
+  <meta name="description" content="78枚のタロットから1枚を引く、シンプルな今日の運勢占い。" />
+  <title>月灯りのタロット｜今日の運勢を1枚で</title>
+  <style>
+:root{color-scheme:dark;--ink:#0c1227;--ink2:#131b36;--gold:#d8ba80;--goldlight:#f2dbaa;--cream:#f7f1e8;--mist:#c8c7d6;--line:rgba(220,190,133,.24);--serif:"Yu Mincho","Hiragino Mincho ProN","Noto Serif JP",Georgia,serif;--sans:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;background:var(--ink);color:var(--cream);font-family:var(--sans);line-height:1.7}button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid var(--goldlight);outline-offset:5px}[hidden]{display:none!important}
+.cosmos{position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 52% -5%,rgba(87,83,129,.39),transparent 52%),radial-gradient(ellipse at 8% 85%,rgba(38,48,89,.7),transparent 50%),radial-gradient(ellipse at 95% 78%,rgba(28,43,72,.55),transparent 48%)}.cosmos:before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle at 9% 17%,#f4daa7 1px,transparent 1.8px),radial-gradient(circle at 83% 23%,#d8c099 1px,transparent 1.8px),radial-gradient(circle at 21% 62%,#e0d9bc .8px,transparent 1.8px),radial-gradient(circle at 75% 80%,#e0d9bc .8px,transparent 1.8px),radial-gradient(circle at 51% 7%,#f3cf9d .7px,transparent 1.8px);opacity:.52}
+.shell{max-width:1080px;margin:auto;padding:0 32px}.header{height:86px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}.logo{text-decoration:none;color:var(--goldlight);font:500 17px var(--serif);letter-spacing:.08em}.logo-icon{font:28px Georgia,serif;vertical-align:-2px;margin-right:7px}.top-label{font-size:10px;letter-spacing:.27em;color:#a9a6bf}
+.main{padding:65px 0 38px;text-align:center}.eyebrow{display:flex;justify-content:center;align-items:center;gap:16px;font:600 10px var(--sans);letter-spacing:.27em;color:var(--gold)}.rule{height:1px;width:30px;background:var(--gold);opacity:.6}h1{font:500 clamp(39px,5vw,56px)/1.55 var(--serif);letter-spacing:.09em;margin:17px 0 12px}h1 span{color:var(--goldlight)}.lead{margin:0;color:var(--mist);font-size:13px;line-height:2;letter-spacing:.035em}.mobile-break{display:none}
+.reading{margin:34px auto 0;max-width:590px}.card-stage{position:relative;width:222px;height:345px;margin:0 auto;perspective:1000px}.card-shadow{position:absolute;left:8%;right:8%;bottom:-14px;height:28px;background:#000;border-radius:50%;filter:blur(16px);opacity:.45}.card{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .85s cubic-bezier(.22,.68,.27,1.02)}.card.flipped{transform:rotateY(180deg)}.card-face{position:absolute;inset:0;border:1px solid #e4c68c;border-radius:12px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 20px 55px rgba(1,3,12,.52)}.card-back{background:radial-gradient(ellipse at center,#384368 0%,#242e50 53%,#18223f 100%);display:flex;align-items:center;justify-content:center}.back-border{position:absolute;inset:10px;border:1px solid #bea477;border-radius:6px}.back-border.inner{inset:19px;border-color:rgba(224,192,131,.28);border-radius:3px}.back-top,.back-bottom{position:absolute;font:21px Georgia,serif;letter-spacing:.23em;color:#dab97d}.back-top{top:30px}.back-bottom{bottom:30px}.back-orbit{position:absolute;width:149px;height:149px;border:1px solid #c7aa7b;border-radius:50%;box-shadow:0 0 0 21px rgba(210,174,115,.04)}.back-moon{font:118px/1 Georgia,serif;color:#edcf96;text-shadow:0 0 30px rgba(238,192,104,.3);transform:rotate(-12deg);margin-top:-10px}.card-front{transform:rotateY(180deg);background:linear-gradient(160deg,#f8edda,#e8d6b6 75%,#ddc39a);color:#42302d;padding:11px}.front-frame{height:100%;width:100%;border:1px solid #ac8b5e;border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 42%,rgba(255,252,240,.75),transparent 60%)}.front-kicker{font:10px Georgia,serif;letter-spacing:.18em;color:#7b6652;margin-bottom:31px}.front-emblem{font:105px/1.2 Georgia,serif;color:#8d6a42;display:block;min-height:120px;text-shadow:0 1px 1px rgba(100,60,40,.1)}.front-emblem.reverse{transform:rotate(180deg)}.front-name{font:500 19px/1.6 var(--serif);margin-top:20px;color:#3f3031;padding:0 5px}.front-orientation{font:12px var(--sans);letter-spacing:.1em;color:#7e635a;margin-top:8px}
+.draw-button{width:min(100%,330px);margin:36px auto 0;display:flex;align-items:center;justify-content:center;gap:20px;border:1px solid #ffdea6;background:linear-gradient(110deg,#d7b275,#efd298 55%,#d1ab70);color:#292538;border-radius:8px;font:700 17px var(--serif);letter-spacing:.08em;padding:17px 20px;box-shadow:0 9px 27px rgba(0,0,0,.2);transition:filter .2s,transform .2s}.draw-button:hover{filter:brightness(1.08);transform:translateY(-2px)}.draw-button:active{transform:translateY(0)}.btn-sparkle{font-family:Georgia,serif;font-size:15px}.below-button{font-size:11px;margin:12px 0 0;color:#a8a8bd}
+.result{margin:45px auto 0;max-width:580px;padding:0 28px 24px;text-align:center;animation:fadeup .6s ease both}.result-divider{display:flex;align-items:center;gap:16px;color:var(--gold)}.result-divider:before,.result-divider:after{content:"";height:1px;background:var(--line);flex:1}.result-eyebrow{font-size:10px;letter-spacing:.24em;color:var(--gold);margin:23px 0 4px}.result h2{font:500 25px/1.7 var(--serif);margin:0 0 19px}.result-cardname{font:500 19px/1.8 var(--serif);color:var(--goldlight)}.keyword{font:600 16px/1.7 var(--serif);color:var(--cream);margin:10px 0 19px}.message{background:linear-gradient(125deg,rgba(42,47,75,.75),rgba(29,34,57,.85));border:1px solid var(--line);border-radius:11px;padding:24px 23px;font:500 15px/2.2 var(--serif);color:#f5eee8;margin:0}.result-footnote{font-size:11px;line-height:1.9;color:#aaa8b9;margin:19px auto}.copy-button{border:1px solid #786c67;border-radius:7px;padding:10px 19px;background:transparent;color:var(--goldlight);font-size:12px}.copy-button:hover{background:rgba(230,194,130,.08)}.copy-button span{margin-left:12px}.copy-status{min-height:18px;color:var(--goldlight);font-size:11px;margin-top:10px}.footer{margin-top:46px;border-top:1px solid var(--line);padding:28px 0 34px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11px;color:#989ab0}.footer span:first-child{font-family:var(--serif);color:var(--goldlight);font-size:14px}
+@keyframes fadeup{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:550px){.shell{padding:0 20px}.header{height:70px}.logo{font-size:15px}.top-label{font-size:8px;letter-spacing:.15em}.main{padding:50px 0 20px}h1{font-size:40px}.lead{font-size:12px}.mobile-break{display:block}.reading{margin-top:28px}.card-stage{width:205px;height:320px}.back-orbit{width:139px;height:139px}.back-moon{font-size:108px}.front-emblem{font-size:94px}.front-name{font-size:18px}.draw-button{font-size:16px;margin-top:30px;padding:16px}.result{padding:0 1px 17px}.result h2{font-size:23px}.message{font-size:14px;padding:22px 19px}.footer{font-size:10px;margin-top:34px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card,.draw-button,.result{transition:none!important;animation:none!important}}
+
+</style>
+</head>
+<body id="top">
+  <div class="cosmos" aria-hidden="true"></div>
+  <div class="shell">
+    <header class="header">
+      <a class="logo" href="#top" aria-label="月灯りのタロット トップへ"><span class="logo-icon">☾</span> 月灯りのタロット</a>
+      <span class="top-label">ONE CARD TAROT</span>
+    </header>
+
+    <main class="main">
+      <p class="eyebrow"><span class="rule"></span> TODAY'S TAROT <span class="rule"></span></p>
+      <h1>今日の運勢を、<br><span>1枚で。</span></h1>
+      <p class="lead">カードを引いて、<br class="mobile-break">今日のあなたへのヒントを受け取ろう。</p>
+
+      <p id="viewer-warning" role="status" style="max-width:520px;margin:22px auto;padding:16px 18px;border:1px solid #d8ba80;border-radius:8px;background:#232c47;color:#f2dbaa;font-size:13px;line-height:1.9;">この画面では占いのプログラムが実行されていません。ChatGPTのHTMLプレビューやiPhoneのファイルプレビューではボタンが動かない場合があります。GitHub PagesなどのWebサイトとして公開し、SafariやChromeで開いてください。</p>
+      <noscript><p style="color:#f2dbaa;">JavaScriptが無効のため、カードを抽選できません。</p></noscript>
+      <section class="reading" aria-label="タロット占い">
+        <div class="card-stage">
+          <div class="card-shadow" aria-hidden="true"></div>
+          <div class="card" id="tarot-card" aria-hidden="true">
+            <div class="card-face card-back">
+              <span class="back-border"></span><span class="back-border inner"></span>
+              <span class="back-top">✧ &nbsp; ✦ &nbsp; ✧</span>
+              <span class="back-orbit"></span><span class="back-moon">☾</span>
+              <span class="back-bottom">✧ &nbsp; ✦ &nbsp; ✧</span>
+            </div>
+            <div class="card-face card-front">
+              <div class="front-frame">
+                <span class="front-kicker" id="front-kicker">TAROT</span>
+                <span class="front-emblem" id="front-emblem">✦</span>
+                <span class="front-name" id="front-name"></span>
+                <span class="front-orientation" id="front-orientation"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="draw-button" id="draw-button" type="button"><span id="draw-label">カードを1枚引く</span> <span class="btn-sparkle" aria-hidden="true">✦</span></button>
+        <p class="below-button" id="action-note">78枚からランダムに1枚を選びます</p>
+
+        <section class="result" id="result" hidden aria-live="polite" aria-labelledby="result-heading">
+          <div class="result-divider"><span>✦</span></div>
+          <p class="result-eyebrow">YOUR MESSAGE</p>
+          <h2 id="result-heading">今日のメッセージ</h2>
+          <div class="result-cardname" id="result-cardname"></div>
+          <p class="keyword" id="result-keyword"></p>
+          <p class="message" id="result-message"></p>
+          <p class="result-footnote">未来を断定するものではなく、今日を考えるためのヒントとして楽しんでください。</p>
+          <button class="copy-button" id="copy-button" type="button">結果をコピーする <span aria-hidden="true">↗</span></button>
+          <p class="copy-status" id="copy-status" role="status" aria-live="polite"></p>
+        </section>
+      </section>
+    </main>
+
+    <footer class="footer"><span>☾ 月灯りのタロット</span><span>気軽に楽しむ、1枚の占い。</span></footer>
+  </div>
+  <script>
+/* タロット78枚 × 正位置・逆位置 = 156通りの日本語鑑定文 */
+window.TAROT_CARDS = [{"id":"major-0","name":"愚者","icon":"✦","kind":"major","upright":["自由な一歩","まだ地図が完成していなくても、好奇心が新しい道を開くときです。"],"reversed":["準備不足","勢いだけで進むと足元が見えなくなりそう。自由と無謀は分けて考えて。"]},{"id":"major-1","name":"魔術師","icon":"✧","kind":"major","upright":["持っている力を使う","必要な道具や経験は思うより身近にあります。小さく実行すると流れが生まれます。"],"reversed":["空回り","できることが多いほど狙いが散らばりがち。まず一つに集中しましょう。"]},{"id":"major-2","name":"女教皇","icon":"☾","kind":"major","upright":["静かな確信","答えを急がず観察すると、言葉にならなかった違和感や望みが見えてきます。"],"reversed":["考えすぎ","情報を集めすぎて直感の声が遠くなっています。判断を休む時間も必要です。"]},{"id":"major-3","name":"女帝","icon":"❀","kind":"major","upright":["豊かさを育む","気持ちと環境に余白をつくるほど、人とのつながりや成果が育ちます。"],"reversed":["与えすぎ","大切にしたい気持ちが、過剰な世話や無理につながっていないか確かめて。"]},{"id":"major-4","name":"皇帝","icon":"♜","kind":"major","upright":["土台を固める","優先順位を決め、責任を引き受けることで状況が整っていきます。"],"reversed":["硬直","正しさにこだわるほど柔軟さを失いそう。仕組みを守る目的を思い出して。"]},{"id":"major-5","name":"教皇","icon":"✠","kind":"major","upright":["信頼できる知恵","基本に立ち返り、経験者の助言を取り入れることで安心して前へ進めます。"],"reversed":["型に縛られる","「普通はこう」という考えが選択肢を狭めているかもしれません。"]},{"id":"major-6","name":"恋人","icon":"♡","kind":"major","upright":["心に沿った選択","誰かとの調和を大切にしつつ、自分が本当に望むものを選ぶ段階です。"],"reversed":["迷いとすれ違い","相手に合わせすぎたり決断を延ばしたりすると、気持ちが曖昧になりそう。"]},{"id":"major-7","name":"戦車","icon":"➶","kind":"major","upright":["前へ進む勢い","目的がはっきりすれば、多少の障害も突破できる行動力があります。"],"reversed":["急ぎすぎ","勝ち負けだけで動くと大事な事情を見落とします。速度を調整して。"]},{"id":"major-8","name":"力","icon":"♌","kind":"major","upright":["しなやかな強さ","強さは押し切ることではなく、感情を受け止めながら向き合う姿勢に表れます。"],"reversed":["力み","無理に平気なふりをするほど疲れやすいとき。まず自分をいたわって。"]},{"id":"major-9","name":"隠者","icon":"✶","kind":"major","upright":["自分の答えを探す","周囲の騒がしさから離れると、何を大切にしたいかが整理できます。"],"reversed":["孤立しすぎ","一人で抱えることが習慣になっていないでしょうか。必要な助けは求めて。"]},{"id":"major-10","name":"運命の輪","icon":"☼","kind":"major","upright":["転機をつかむ","状況が動きやすい時期。偶然のきっかけを見逃さず、柔軟に対応しましょう。"],"reversed":["波に振り回される","外側の変化を無理に操ろうとせず、自分で選べる行動に意識を向けて。"]},{"id":"major-11","name":"正義","icon":"⚖","kind":"major","upright":["公平な判断","感情と事実を分けて見れば、納得できる選択に近づけます。"],"reversed":["偏った見方","自分にも相手にも厳しすぎないか確認を。結論を急ぐ前に条件を整理して。"]},{"id":"major-12","name":"吊るされた男","icon":"◇","kind":"major","upright":["見方を変える","今は立ち止まることにも意味があります。視点を変えると別の解決策が見えてきます。"],"reversed":["我慢のしすぎ","報われるはずと耐え続けていませんか。続ける理由を問い直してみて。"]},{"id":"major-13","name":"死神","icon":"✢","kind":"major","upright":["区切りと再生","役割を終えたものを手放すことで、新しい余地が生まれます。文字通りの死を示すカードではありません。"],"reversed":["切り替えへの抵抗","終わりを認めるのが怖くても、変化を先送りするほど負担が増すことがあります。"]},{"id":"major-14","name":"節制","icon":"♒","kind":"major","upright":["ほどよい調整","違う考えやペースを少しずつ混ぜ合わせることが、穏やかな前進につながります。"],"reversed":["バランスの乱れ","予定を詰め込みすぎたり我慢しすぎたりしていないか見直しましょう。"]},{"id":"major-15","name":"悪魔","icon":"♢","kind":"major","upright":["執着に気づく","魅力的なものほど、依存や惰性がないか点検すると自由を取り戻せます。"],"reversed":["手放すきっかけ","自分を縛っていた習慣に気づき始めています。小さな距離の取り方を考えて。"]},{"id":"major-16","name":"塔","icon":"⚡","kind":"major","upright":["思い込みの更新","予想外の揺れがあっても、それは古い前提を見直す機会になることがあります。"],"reversed":["変化への警戒","問題を見ないふりにすると不安が残ります。まず安全な範囲で現状を確認して。"]},{"id":"major-17","name":"星","icon":"☆","kind":"major","upright":["希望をつなぐ","遠い理想も、今日できる小さな手当てから現実に近づいていきます。"],"reversed":["自信の低下","希望が見えにくい日もあります。進歩が小さくても無かったことにしないで。"]},{"id":"major-18","name":"月","icon":"☽","kind":"major","upright":["見えないものを確かめる","曖昧さが残る状況です。不安と事実を切り分ける時間が助けになります。"],"reversed":["不安の増幅","想像の中で問題が大きくなっていそう。確認できる情報を一つ増やして。"]},{"id":"major-19","name":"太陽","icon":"☀","kind":"major","upright":["喜びを分かち合う","素直な表現や前向きな姿勢が、周囲にも良い影響を広げます。"],"reversed":["期待のかけすぎ","明るく振る舞うことを義務にしなくて大丈夫。実感できる喜びを選びましょう。"]},{"id":"major-20","name":"審判","icon":"♬","kind":"major","upright":["再出発の合図","過去の経験に新しい意味が見つかり、もう一度選び直す機会があります。"],"reversed":["振り返り不足","古い判断を繰り返す前に、以前と何が変わったかを確かめて。"]},{"id":"major-21","name":"世界","icon":"◎","kind":"major","upright":["ひとつの完成","取り組んできたことがまとまり、次の段階へ進む準備が整ってきました。"],"reversed":["あと一歩の未完","完璧を待って締めくくれないことも。区切りを決めれば次が見えます。"]},{"id":"minor-ワンド-1","name":"ワンドのエース","icon":"♨","kind":"minor","upright":["情熱の芽","やってみたい気持ちが生まれています。まず試す価値があります。"],"reversed":["熱意の空回り","気持ちはあっても着手点が曖昧。最初の作業を小さくして。"]},{"id":"minor-ワンド-2","name":"ワンドの2","icon":"♨","kind":"minor","upright":["計画を見渡す","今いる場所から少し遠くを見て、可能性を比べるときです。"],"reversed":["決めきれない","選択肢を広げすぎて動きにくい状態。判断基準を一つ決めて。"]},{"id":"minor-ワンド-3","name":"ワンドの3","icon":"♨","kind":"minor","upright":["進展の兆し","仕込んできたことが動き始めます。外との連携が鍵になります。"],"reversed":["待ちぼうけ","結果を待つだけでなく、確認や連絡を自分から行って。"]},{"id":"minor-ワンド-4","name":"ワンドの4","icon":"♨","kind":"minor","upright":["安心できる節目","落ち着ける場所や仲間と、小さな達成を喜べるときです。"],"reversed":["居場所の違和感","表向きは順調でも無理をしていないか振り返って。"]},{"id":"minor-ワンド-5","name":"ワンドの5","icon":"♨","kind":"minor","upright":["意見のぶつかり合い","競い合いの中に成長の材料があります。相手の主張も聞いてみて。"],"reversed":["摩擦の長期化","勝ち負けにこだわるほど消耗します。目的を共有して。"]},{"id":"minor-ワンド-6","name":"ワンドの6","icon":"♨","kind":"minor","upright":["努力が認められる","積み重ねが見える形で伝わりやすい時期。感謝も忘れずに。"],"reversed":["評価への依存","人の拍手がなくても意味のある成果を確認して。"]},{"id":"minor-ワンド-7","name":"ワンドの7","icon":"♨","kind":"minor","upright":["自分の立場を守る","大事なものを守るため、落ち着いて線引きをする必要があります。"],"reversed":["守り疲れ","全部を一人で防ごうとせず、支援を求めましょう。"]},{"id":"minor-ワンド-8","name":"ワンドの8","icon":"♨","kind":"minor","upright":["急展開","連絡や予定が一気に進むかもしれません。優先順位を決めて。"],"reversed":["行き違い","速さを求めるほど伝達ミスが増えがち。確認を入れて。"]},{"id":"minor-ワンド-9","name":"ワンドの9","icon":"♨","kind":"minor","upright":["最後の踏ん張り","経験を生かせば、慎重さと粘り強さで乗り切れそうです。"],"reversed":["警戒しすぎ","傷つくのを恐れて心を閉ざしていないか見てみて。"]},{"id":"minor-ワンド-10","name":"ワンドの10","icon":"♨","kind":"minor","upright":["抱え込みすぎ","責任感が強くなりそう。負担の配分を変える余地があります。"],"reversed":["限界のサイン","努力を増やす前に、手放せる役目を探してください。"]},{"id":"minor-ワンド-11","name":"ワンドのペイジ","icon":"♨","kind":"minor","upright":["好奇心の知らせ","面白そうな話をきっかけに、新しい学びが始まります。"],"reversed":["気まぐれ","新鮮さだけを追うと途中で飽きることも。小さな継続を。"]},{"id":"minor-ワンド-12","name":"ワンドのナイト","icon":"♨","kind":"minor","upright":["勢いのある挑戦","考えたことを形にする推進力があります。周囲との歩調も大切に。"],"reversed":["突進と衝動","勢いで約束しすぎないよう、実現可能性を確認して。"]},{"id":"minor-ワンド-13","name":"ワンドのクイーン","icon":"♨","kind":"minor","upright":["自分らしい魅力","得意なことをのびのび表現すると、人との輪も広がります。"],"reversed":["自信の揺れ","他人との比較から離れ、自分の良さを具体的に数えて。"]},{"id":"minor-ワンド-14","name":"ワンドのキング","icon":"♨","kind":"minor","upright":["熱意あるリーダー","方向性を示して周囲を動かせるとき。相手の意見も生かして。"],"reversed":["独断","自分の正しさだけで押さないこと。任せる力も必要です。"]},{"id":"minor-カップ-1","name":"カップのエース","icon":"♡","kind":"minor","upright":["心がひらく","素直な気持ちが生まれ、優しいつながりの入口が見えています。"],"reversed":["感情の停滞","言葉にしなかった気持ちを、まず自分で認めてみて。"]},{"id":"minor-カップ-2","name":"カップの2","icon":"♡","kind":"minor","upright":["気持ちの交流","対等に向き合うことで、信頼が深まる可能性があります。"],"reversed":["歩幅の違い","期待を推測だけで決めず、相手の考えを確かめて。"]},{"id":"minor-カップ-3","name":"カップの3","icon":"♡","kind":"minor","upright":["喜びを分かち合う","一緒に楽しむ時間が気持ちを軽くしてくれます。"],"reversed":["付き合い疲れ","無理な同調をせず、心地よい距離感を選びましょう。"]},{"id":"minor-カップ-4","name":"カップの4","icon":"♡","kind":"minor","upright":["心の棚卸し","今あるものに慣れて見落とした気持ちがないか、静かに見つめて。"],"reversed":["見方が変わる","停滞の理由がわかり、新しい刺激を受け取れるかもしれません。"]},{"id":"minor-カップ-5","name":"カップの5","icon":"♡","kind":"minor","upright":["失ったものを悼む","残念な気持ちを無理に消さず、まだ残っている支えにも目を向けて。"],"reversed":["立ち直りの兆し","過去の痛みを整理し、新しい関係を考え始められそうです。"]},{"id":"minor-カップ-6","name":"カップの6","icon":"♡","kind":"minor","upright":["懐かしい温もり","昔の縁や思い出が、今の気持ちを整える助けになります。"],"reversed":["過去への偏り","思い出を美化しすぎず、現在の相手や状況も見て。"]},{"id":"minor-カップ-7","name":"カップの7","icon":"♡","kind":"minor","upright":["理想が広がる","想像力が豊かですが、すべてを選ぶことはできません。"],"reversed":["幻想から醒める","希望を一つ選び、実際に確かめる段階に来ています。"]},{"id":"minor-カップ-8","name":"カップの8","icon":"♡","kind":"minor","upright":["大切なものを探し直す","今まで満たされなかった部分に気づき、別の道を選べるとき。"],"reversed":["踏み出せない","変わりたいのに戻ってしまう理由を、責めずに観察して。"]},{"id":"minor-カップ-9","name":"カップの9","icon":"♡","kind":"minor","upright":["満ち足りた実感","手元にある豊かさを味わうことで、満足感が増していきます。"],"reversed":["満足の基準","欲しいものを増やす前に、何が十分なのか考えて。"]},{"id":"minor-カップ-10","name":"カップの10","icon":"♡","kind":"minor","upright":["心のつながり","日常の安心や信頼が幸福感の土台になっています。"],"reversed":["理想の家族像","完璧な関係を求めすぎず、実際の気持ちを話して。"]},{"id":"minor-カップ-11","name":"カップのペイジ","icon":"♡","kind":"minor","upright":["優しい気づき","小さな好意や感性が新しい交流につながるかもしれません。"],"reversed":["気持ちの未整理","感情の波に飲まれず、伝え方を整えて。"]},{"id":"minor-カップ-12","name":"カップのナイト","icon":"♡","kind":"minor","upright":["気持ちを伝える","心にある願いを丁寧に表現すると、関係が進むきっかけになります。"],"reversed":["甘い期待","良い言葉だけでなく、行動が伴うかを確認して。"]},{"id":"minor-カップ-13","name":"カップのクイーン","icon":"♡","kind":"minor","upright":["共感と受容","自分や相手の繊細な変化に気づけるとき。境界線も大切です。"],"reversed":["感情の抱え込み","人の悩みを自分の責任にしすぎないで。"]},{"id":"minor-カップ-14","name":"カップのキング","icon":"♡","kind":"minor","upright":["感情を整える","落ち着いて受け止める姿勢が、信頼を生みます。"],"reversed":["感情の抑圧","平静を装うより、本当の気持ちを安全な形で伝えて。"]},{"id":"minor-ソード-1","name":"ソードのエース","icon":"♢","kind":"minor","upright":["はっきり見抜く","考えを整理し、必要な言葉で状況を切り開けそうです。"],"reversed":["言葉が鋭くなる","正しい主張でも伝え方次第で届き方が変わります。"]},{"id":"minor-ソード-2","name":"ソードの2","icon":"♢","kind":"minor","upright":["判断の保留","今は白黒を急がず、双方の事情を見比べる時間です。"],"reversed":["決断の先送り","見たくない事実を避けていないか確認しましょう。"]},{"id":"minor-ソード-3","name":"ソードの3","icon":"♢","kind":"minor","upright":["胸の痛み","傷ついた気持ちを無理に隠さず、回復の余地を作るとき。"],"reversed":["癒やしへの一歩","痛みを受け入れつつ、今できることへ目を向けて。"]},{"id":"minor-ソード-4","name":"ソードの4","icon":"♢","kind":"minor","upright":["休息と整理","立ち止まることで、複雑な考えが落ち着いてきます。"],"reversed":["休めない","疲れているのに頭だけ動いていそう。意識して区切りを。"]},{"id":"minor-ソード-5","name":"ソードの5","icon":"♢","kind":"minor","upright":["勝っても残るもの","言い負かすことと、問題が解決することは別かもしれません。"],"reversed":["争いを終える","意地を張り続けるより、対話をやり直す余地を探して。"]},{"id":"minor-ソード-6","name":"ソードの6","icon":"♢","kind":"minor","upright":["穏やかな移動","難しい状況から少し距離を取り、次の場所へ向かえそうです。"],"reversed":["移行のためらい","慣れた問題に戻りたくなるとき。小さな変化から始めて。"]},{"id":"minor-ソード-7","name":"ソードの7","icon":"♢","kind":"minor","upright":["工夫と慎重さ","正面突破だけでなく、段取りや情報管理が必要になりそう。"],"reversed":["秘密の負担","隠すことが増えて苦しくなっていないか整理して。"]},{"id":"minor-ソード-8","name":"ソードの8","icon":"♢","kind":"minor","upright":["思い込みの枠","できないと思っていることにも、試せる余地があるかもしれません。"],"reversed":["視野の回復","自分を縛っていた前提に気づけそう。選択肢を確認して。"]},{"id":"minor-ソード-9","name":"ソードの9","icon":"♢","kind":"minor","upright":["考えすぎた夜","不安が大きくなりやすいとき。想像と事実を分けて扱って。"],"reversed":["心配の出口","頭の中だけで反すうせず、話す・書くなど外に出して。"]},{"id":"minor-ソード-10","name":"ソードの10","icon":"♢","kind":"minor","upright":["区切りを迎える","つらい局面にも終点があります。次の負担を増やさないことが優先です。"],"reversed":["回復の途中","過去の痛みを抱えつつ、少しずつ立て直せそうです。"]},{"id":"minor-ソード-11","name":"ソードのペイジ","icon":"♢","kind":"minor","upright":["観察と質問","新しい情報を丁寧に調べることで、判断の精度が上がります。"],"reversed":["疑いすぎ","相手の言葉を悪く取りすぎず、確認できる点から見て。"]},{"id":"minor-ソード-12","name":"ソードのナイト","icon":"♢","kind":"minor","upright":["一直線の決断","迷いを断ち切る勢いがありますが、周囲への説明も必要です。"],"reversed":["言葉の暴走","急いで結論を出す前に、影響を受ける人を思い浮かべて。"]},{"id":"minor-ソード-13","name":"ソードのクイーン","icon":"♢","kind":"minor","upright":["冷静な境界線","事実を見極め、必要な距離を取る判断が役立ちます。"],"reversed":["厳しさの偏り","理屈が正しくても気持ちを置き去りにしないで。"]},{"id":"minor-ソード-14","name":"ソードのキング","icon":"♢","kind":"minor","upright":["筋の通った方針","原則と情報に基づく判断が、周囲の安心につながります。"],"reversed":["頑固な正論","正しい手順だけでなく、例外が必要な事情も見て。"]},{"id":"minor-ペンタクル-1","name":"ペンタクルのエース","icon":"◈","kind":"minor","upright":["現実的な機会","小さな資源や仕事の機会を丁寧に育てると、形になりそうです。"],"reversed":["機会を逃しやすい","条件が整うのを待ちすぎず、最小限の一歩を考えて。"]},{"id":"minor-ペンタクル-2","name":"ペンタクルの2","icon":"◈","kind":"minor","upright":["やりくりの工夫","複数の予定や負担を柔軟に調整できるときです。"],"reversed":["余裕不足","全部を同時にこなそうとせず、優先順位を決めて。"]},{"id":"minor-ペンタクル-3","name":"ペンタクルの3","icon":"◈","kind":"minor","upright":["協力して形にする","役割を持ち寄ることで、一人では難しい仕事が進みます。"],"reversed":["連携不足","相手の期待と自分の担当範囲を確認して。"]},{"id":"minor-ペンタクル-4","name":"ペンタクルの4","icon":"◈","kind":"minor","upright":["守りたい基盤","大切な資源を維持する姿勢が役立ちます。使いどころも考えて。"],"reversed":["抱え込み","失う不安から締めつけすぎていないか見直して。"]},{"id":"minor-ペンタクル-5","name":"ペンタクルの5","icon":"◈","kind":"minor","upright":["不足感に気づく","心細さを感じやすいとき。利用できる支援や制度を探して。"],"reversed":["助けを受け取る","頼れる手段が見つかり、少しずつ状況が和らぎそうです。"]},{"id":"minor-ペンタクル-6","name":"ペンタクルの6","icon":"◈","kind":"minor","upright":["与える・受け取る","対等なやり取りが続くよう、負担と感謝の釣り合いを見て。"],"reversed":["不公平感","一方的な援助になっていないか条件を整理しましょう。"]},{"id":"minor-ペンタクル-7","name":"ペンタクルの7","icon":"◈","kind":"minor","upright":["育つまで待つ","努力がすぐ結果にならなくても、途中経過を確かめる価値があります。"],"reversed":["結果への焦り","時間をかけるべきものと、方法を変えるべきものを分けて。"]},{"id":"minor-ペンタクル-8","name":"ペンタクルの8","icon":"◈","kind":"minor","upright":["地道に磨く","小さな改善の反復が、確かな技術や成果につながります。"],"reversed":["単調さへの疲れ","頑張り方が目的化していないか、休みも含めて調整を。"]},{"id":"minor-ペンタクル-9","name":"ペンタクルの9","icon":"◈","kind":"minor","upright":["積み重ねた実り","自分の努力や選択が、暮らしの安定に近づいています。"],"reversed":["満たされない豊かさ","数字だけでなく、安心や自由の実感も確かめて。"]},{"id":"minor-ペンタクル-10","name":"ペンタクルの10","icon":"◈","kind":"minor","upright":["長く続く土台","目先の成果だけでなく、将来に残る仕組みを意識するとき。"],"reversed":["古い慣習","受け継ぐものと変えるものを分けて考えましょう。"]},{"id":"minor-ペンタクル-11","name":"ペンタクルのペイジ","icon":"◈","kind":"minor","upright":["実務的な学び","興味を手順に落とし込むと、着実に前へ進めます。"],"reversed":["準備ばかり","調べるだけで終えず、試作品をひとつ作ってみて。"]},{"id":"minor-ペンタクル-12","name":"ペンタクルのナイト","icon":"◈","kind":"minor","upright":["堅実な積み重ね","急がず丁寧に続けることが、信用と成果につながります。"],"reversed":["変化を嫌う","安全策に寄りすぎて機会を逃していないか見直して。"]},{"id":"minor-ペンタクル-13","name":"ペンタクルのクイーン","icon":"◈","kind":"minor","upright":["暮らしを整える","自分と周囲の生活を大切にする工夫が、余裕を生みます。"],"reversed":["世話の負担","人を支える前に、自分の資源を守れているか確認して。"]},{"id":"minor-ペンタクル-14","name":"ペンタクルのキング","icon":"◈","kind":"minor","upright":["資源を活かす","経験と資源を計画的に扱うことで、安定した成長が期待できます。"],"reversed":["成果への固執","持つこと自体が目的になっていないか点検して。"]}];
+
+</script>
+  <script>
+/* 1枚引きタロット：サーバー・AI・外部APIなしで動作します。 */
+(function () {
+  'use strict';
+  const CARDS = window.TAROT_CARDS;
+  if (!Array.isArray(CARDS) || CARDS.length !== 78) {
+    throw new Error('78枚のカードデータが必要です。');
+  }
+  const $ = (id) => document.getElementById(id);
+  $('viewer-warning').hidden = true;
+  const cardEl = $('tarot-card');
+  const button = $('draw-button');
+  let latest = null;
+
+  function randomInt(max) {
+    if (!Number.isInteger(max) || max <= 0) throw new RangeError('max must be positive');
+    // 暗号学的乱数を用い、剰余による偏りを避ける（占いの精度を保証する意味ではありません）。
+    if (window.crypto && typeof window.crypto.getRandomValues === 'function') {
+      const limit = 4294967296 - (4294967296 % max);
+      const arr = new Uint32Array(1);
+      do { window.crypto.getRandomValues(arr); } while (arr[0] >= limit);
+      return arr[0] % max;
+    }
+    return Math.floor(Math.random() * max);
+  }
+
+  function drawCard() {
+    const item = CARDS[randomInt(CARDS.length)];
+    const reversed = randomInt(2) === 1;
+    const [keyword, message] = reversed ? item.reversed : item.upright;
+    return {
+      id: item.id,
+      name: item.name,
+      icon: item.icon,
+      kind: item.kind,
+      orientation: reversed ? '逆位置' : '正位置',
+      reversed, keyword, message
+    };
+  }
+
+  function render(result) {
+    $('result').hidden = true;
+    $('copy-status').textContent = '';
+    // 再抽選時もアニメーションを確実に再始動させます。
+    cardEl.classList.remove('flipped');
+    void cardEl.offsetWidth;
+    $('front-kicker').textContent = result.kind === 'major' ? 'MAJOR ARCANA' : 'MINOR ARCANA';
+    $('front-emblem').textContent = result.icon;
+    $('front-emblem').classList.toggle('reverse', result.reversed);
+    $('front-name').textContent = result.name;
+    $('front-orientation').textContent = result.orientation;
+    $('result-cardname').textContent = `${result.name}・${result.orientation}`;
+    $('result-keyword').textContent = `「${result.keyword}」`;
+    $('result-message').textContent = result.message;
+    $('draw-label').textContent = 'もう一度引く';
+    $('action-note').textContent = '引くたびに、新しく1枚選ばれます';
+    cardEl.classList.add('flipped');
+    $('result').hidden = false;
+  }
+
+  function formatResult(result) {
+    return `☾ 月灯りのタロット｜今日の運勢\n${result.name}・${result.orientation}\n「${result.keyword}」\n${result.message}\n※占いはエンターテインメントです。`;
+  }
+
+  async function copyResult() {
+    if (!latest) return;
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(formatResult(latest));
+      } else {
+        const input = document.createElement('textarea');
+        input.value = formatResult(latest);
+        input.style.position = 'fixed'; input.style.opacity = '0';
+        document.body.appendChild(input);
+        input.select();
+        const success = document.execCommand('copy');
+        input.remove();
+        if (!success) throw new Error('copy unavailable');
+      }
+      $('copy-status').textContent = '結果をコピーしました。';
+    } catch (_) {
+      $('copy-status').textContent = 'コピーできませんでした。文章を選択してコピーしてください。';
+    }
+  }
+
+  button.addEventListener('click', () => { latest = drawCard(); render(latest); });
+  $('copy-button').addEventListener('click', copyResult);
+  // ブラウザ開発者向け：自動テストに使える抽選エンジン。
+  window.SimpleTarot = Object.freeze({drawCard, getDeck: () => CARDS.map(({id, name}) => ({id,name}))});
+})();
+
+</script>
+</body>
+</html>
