@@ -4,9 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#0c1227" />
-  <meta name="description" content="78枚のタロットから1枚を引く、シンプルな今日の運勢占い。" />
-  <title>月灯りのタロット｜今日の運勢を1枚で</title>
+  <meta name="description" content="今日の運勢・恋愛運・仕事運から選び、78枚のタロットから1枚を引くシンプルな占い。" />
+  <title>月灯りのタロット｜今日・恋愛・仕事を1枚で占う</title>
   <style>
+.theme-picker{margin:0 auto 29px;max-width:470px}.theme-label{font-size:12px;color:var(--mist);margin:0 0 11px;letter-spacing:.1em}.theme-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.theme-option{font-size:13px;border:1px solid var(--line);color:var(--cream);border-radius:8px;background:rgba(25,33,62,.8);padding:12px 6px;transition:background .15s,border-color .15s}.theme-option.active{border-color:var(--goldlight);color:#2b2531;background:var(--goldlight);font-weight:700}.theme-option:hover:not(.active){background:rgba(73,78,118,.75)}.theme-advice{border-left:2px solid var(--gold);text-align:left;margin:16px 0 0;padding:7px 8px 7px 16px;font:500 14px/2 var(--serif);color:var(--goldlight)}@media(max-width:550px){.theme-option{font-size:12px;padding:12px 3px}.theme-picker{margin-bottom:25px}.theme-advice{font-size:13px}}
+
 :root{color-scheme:dark;--ink:#0c1227;--ink2:#131b36;--gold:#d8ba80;--goldlight:#f2dbaa;--cream:#f7f1e8;--mist:#c8c7d6;--line:rgba(220,190,133,.24);--serif:"Yu Mincho","Hiragino Mincho ProN","Noto Serif JP",Georgia,serif;--sans:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;background:var(--ink);color:var(--cream);font-family:var(--sans);line-height:1.7}button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid var(--goldlight);outline-offset:5px}[hidden]{display:none!important}
 .cosmos{position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 52% -5%,rgba(87,83,129,.39),transparent 52%),radial-gradient(ellipse at 8% 85%,rgba(38,48,89,.7),transparent 50%),radial-gradient(ellipse at 95% 78%,rgba(28,43,72,.55),transparent 48%)}.cosmos:before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle at 9% 17%,#f4daa7 1px,transparent 1.8px),radial-gradient(circle at 83% 23%,#d8c099 1px,transparent 1.8px),radial-gradient(circle at 21% 62%,#e0d9bc .8px,transparent 1.8px),radial-gradient(circle at 75% 80%,#e0d9bc .8px,transparent 1.8px),radial-gradient(circle at 51% 7%,#f3cf9d .7px,transparent 1.8px);opacity:.52}
@@ -31,12 +33,20 @@
 
     <main class="main">
       <p class="eyebrow"><span class="rule"></span> TODAY'S TAROT <span class="rule"></span></p>
-      <h1>今日の運勢を、<br><span>1枚で。</span></h1>
-      <p class="lead">カードを引いて、<br class="mobile-break">今日のあなたへのヒントを受け取ろう。</p>
+      <h1>あなたの運勢を、<br><span>1枚で。</span></h1>
+      <p class="lead">テーマを選んでカードを引く。<br class="mobile-break">あなたへのヒントを受け取ろう。</p>
 
       <p id="viewer-warning" role="status" style="max-width:520px;margin:22px auto;padding:16px 18px;border:1px solid #d8ba80;border-radius:8px;background:#232c47;color:#f2dbaa;font-size:13px;line-height:1.9;">この画面では占いのプログラムが実行されていません。ChatGPTのHTMLプレビューやiPhoneのファイルプレビューではボタンが動かない場合があります。GitHub PagesなどのWebサイトとして公開し、SafariやChromeで開いてください。</p>
       <noscript><p style="color:#f2dbaa;">JavaScriptが無効のため、カードを抽選できません。</p></noscript>
       <section class="reading" aria-label="タロット占い">
+        <div class="theme-picker" id="theme-picker" role="group" aria-label="占うテーマ">
+          <p class="theme-label">占うテーマを選ぶ</p>
+          <div class="theme-options">
+            <button type="button" class="theme-option active" data-theme="today" aria-pressed="true">今日の運勢</button>
+            <button type="button" class="theme-option" data-theme="love" aria-pressed="false">恋愛運</button>
+            <button type="button" class="theme-option" data-theme="work" aria-pressed="false">仕事運</button>
+          </div>
+        </div>
         <div class="card-stage">
           <div class="card-shadow" aria-hidden="true"></div>
           <div class="card" id="tarot-card" aria-hidden="true">
@@ -67,6 +77,7 @@
           <div class="result-cardname" id="result-cardname"></div>
           <p class="keyword" id="result-keyword"></p>
           <p class="message" id="result-message"></p>
+          <p class="theme-advice" id="theme-advice" hidden></p>
           <p class="result-footnote">未来を断定するものではなく、今日を考えるためのヒントとして楽しんでください。</p>
           <button class="copy-button" id="copy-button" type="button">結果をコピーする <span aria-hidden="true">↗</span></button>
           <p class="copy-status" id="copy-status" role="status" aria-live="polite"></p>
@@ -82,10 +93,17 @@ window.TAROT_CARDS = [{"id":"major-0","name":"愚者","icon":"✦","kind":"major
 
 </script>
   <script>
+/* 恋愛と仕事のカード別助言。各配列は[正位置, 逆位置] */
+window.TAROT_THEME_ADVICE = {"major-0":{"love":["自然体で新しいつながりを楽しんで","勢いだけで相手に近づかないで"],"work":["新しい企画を小さく試して","見切り発車より準備を優先して"]},"major-1":{"love":["自分の魅力を素直に表現して","駆け引きより誠実な言葉を"],"work":["得意な技能を実際に使って","目標を一つに絞ってから動いて"]},"major-2":{"love":["心の声を静かに確かめて","相手を深読みしすぎないで"],"work":["状況を観察してから判断を","情報を集めすぎず整理して"]},"major-3":{"love":["優しさを受け取る余裕も持って","尽くしすぎて無理をしないで"],"work":["周囲の力を育てる機会に","役割を抱え込みすぎないで"]},"major-4":{"love":["安心できる約束を積み上げて","思いどおりに動かそうとしないで"],"work":["役割と期限をはっきりさせて","決まりごとへの固執に注意"]},"major-5":{"love":["信頼できる人に相談してみて","世間の常識で関係を決めつけないで"],"work":["経験者の知恵を取り入れて","古い慣習を見直してみて"]},"major-6":{"love":["自分が望む関係を選んで","迷いを放置せず本音を確かめて"],"work":["協力相手を丁寧に選んで","周囲に流されて決めないで"]},"major-7":{"love":["気になる人に自分から声をかけて","強引な進展を求めないで"],"work":["目標に向けて着実に前進して","成果を急ぎすぎないで"]},"major-8":{"love":["感情を穏やかに伝えて","平気なふりを続けないで"],"work":["粘り強い対応を心がけて","頑張りすぎる前に休息を"]},"major-9":{"love":["一人の時間で気持ちを整理して","閉じこもらず助けも求めて"],"work":["集中して課題を見つめ直して","一人で抱え込まず相談を"]},"major-10":{"love":["偶然の出会いや会話を楽しんで","相手の気分に振り回されないで"],"work":["予定変更にも柔軟に対応して","外部の変化に焦らないで"]},"major-11":{"love":["自分と相手の希望を公平に扱って","正しさの競争にしないで"],"work":["事実を整理して判断して","感情だけで評価を決めないで"]},"major-12":{"love":["相手の立場を考える時間をとって","待ち続けるだけで終わらないで"],"work":["別の視点から解決策を探して","無理な我慢を続けないで"]},"major-13":{"love":["関係の変化を恐れず向き合って","過去の関係にとらわれすぎないで"],"work":["古い方法を終える決断も大切","必要な改革を先送りしないで"]},"major-14":{"love":["連絡の頻度や距離感を整えて","気持ちを飲み込みすぎないで"],"work":["意見の違いを調整して","負担の偏りを修正して"]},"major-15":{"love":["依存せず自分の時間を守って","束縛や疑いを深めないで"],"work":["目先の誘惑より信用を優先","楽な近道に飛びつかないで"]},"major-16":{"love":["衝突したときは本音を整理して","感情の勢いで結論を出さないで"],"work":["問題が表面化したら原因を調べて","トラブルを隠さず対処して"]},"major-17":{"love":["希望や夢を言葉にしてみて","理想と現実の差を責めないで"],"work":["未来の目標を描いてみて","自信を失いすぎないで"]},"major-18":{"love":["不安を言葉にして確かめて","思い込みで相手を疑わないで"],"work":["曖昧な情報は確認して","噂や推測で判断しないで"]},"major-19":{"love":["一緒に楽しむ時間を大切に","無理に明るく振る舞わないで"],"work":["周囲と成功を分かち合って","評価を求めて背伸びしないで"]},"major-20":{"love":["伝えそびれた思いを整理して","同じすれ違いを繰り返さないで"],"work":["過去の経験を判断に生かして","先送りした課題を見直して"]},"major-21":{"love":["今のつながりの充実を味わって","理想の形にこだわりすぎないで"],"work":["完成した成果を次につなげて","完璧を求めて終わらせないで"]},"minor-ワンド-1":{"love":["恋愛は情熱や行動が鍵。新しい一歩を小さく始めて","恋愛は勢いの空回りに注意。期待だけで進まず確かめて"],"work":["仕事は挑戦する姿勢が鍵。新しい提案の種を育てて","仕事は焦りや衝突に注意。準備不足のまま着手しないで"]},"minor-ワンド-2":{"love":["恋愛は情熱や行動が鍵。二つの選択肢を比べてみて","恋愛は勢いの空回りに注意。迷いを長引かせず話して"],"work":["仕事は挑戦する姿勢が鍵。見通しを立てて一歩進めて","仕事は焦りや衝突に注意。決断を引き延ばしすぎないで"]},"minor-ワンド-3":{"love":["恋愛は情熱や行動が鍵。これからの関係を想像して","恋愛は勢いの空回りに注意。先を急がず今を見つめて"],"work":["仕事は挑戦する姿勢が鍵。成果を待ちながら次を考えて","仕事は焦りや衝突に注意。結果待ちで手を止めないで"]},"minor-ワンド-4":{"love":["恋愛は情熱や行動が鍵。心地よい時間を分かち合って","恋愛は勢いの空回りに注意。安心感を形だけで測らないで"],"work":["仕事は挑戦する姿勢が鍵。小さな達成を仲間と喜んで","仕事は焦りや衝突に注意。居心地の悪さを放置しないで"]},"minor-ワンド-5":{"love":["恋愛は情熱や行動が鍵。意見の違いから学んでみて","恋愛は勢いの空回りに注意。勝ち負けにこだわらないで"],"work":["仕事は挑戦する姿勢が鍵。競争から得られる学びを探して","仕事は焦りや衝突に注意。対立に力を使いすぎないで"]},"minor-ワンド-6":{"love":["恋愛は情熱や行動が鍵。気持ちを丁寧に伝えて","恋愛は勢いの空回りに注意。相手の反応だけに依存しないで"],"work":["仕事は挑戦する姿勢が鍵。これまでの成果を共有して","仕事は焦りや衝突に注意。承認を求めすぎないで"]},"minor-ワンド-7":{"love":["恋愛は情熱や行動が鍵。大切な境界線を守って","恋愛は勢いの空回りに注意。防御的な態度を緩めて"],"work":["仕事は挑戦する姿勢が鍵。譲れない点を明確にして","仕事は焦りや衝突に注意。一人で戦おうとしないで"]},"minor-ワンド-8":{"love":["恋愛は情熱や行動が鍵。必要な連絡を早めにして","恋愛は勢いの空回りに注意。急ぎすぎず確認を忘れずに"],"work":["仕事は挑戦する姿勢が鍵。調整を素早く進めて","仕事は焦りや衝突に注意。慌てて手順を飛ばさないで"]},"minor-ワンド-9":{"love":["恋愛は情熱や行動が鍵。過去の経験を生かして向き合って","恋愛は勢いの空回りに注意。疑いすぎて心を閉ざさないで"],"work":["仕事は挑戦する姿勢が鍵。慎重に最後の一歩を進めて","仕事は焦りや衝突に注意。警戒しすぎて機会を逃さないで"]},"minor-ワンド-10":{"love":["恋愛は情熱や行動が鍵。自分ばかり我慢しないで","恋愛は勢いの空回りに注意。抱えた負担を伝えて"],"work":["仕事は挑戦する姿勢が鍵。仕事の量を見直して","仕事は焦りや衝突に注意。責任を全部背負い込まないで"]},"minor-ワンド-11":{"love":["恋愛は情熱や行動が鍵。素直な好奇心を大切にして","恋愛は勢いの空回りに注意。一時の気分で決めつけないで"],"work":["仕事は挑戦する姿勢が鍵。新しい学びを始めて","仕事は焦りや衝突に注意。思いつきで方針を変えないで"]},"minor-ワンド-12":{"love":["恋愛は情熱や行動が鍵。情熱を言葉にして伝えて","恋愛は勢いの空回りに注意。相手のペースも尊重して"],"work":["仕事は挑戦する姿勢が鍵。熱意を具体的な行動にして","仕事は焦りや衝突に注意。焦って周囲を置き去りにしないで"]},"minor-ワンド-13":{"love":["恋愛は情熱や行動が鍵。自分らしい魅力を認めて","恋愛は勢いの空回りに注意。他人の評価で自信を決めないで"],"work":["仕事は挑戦する姿勢が鍵。人を支える強みを発揮して","仕事は焦りや衝突に注意。自分だけで抱え込まないで"]},"minor-ワンド-14":{"love":["恋愛は情熱や行動が鍵。信頼できる態度を示して","恋愛は勢いの空回りに注意。強い言葉で押し切らないで"],"work":["仕事は挑戦する姿勢が鍵。方針を示しつつ話を聞いて","仕事は焦りや衝突に注意。独断で進めないで"]},"minor-カップ-1":{"love":["恋愛は気持ちのつながりが鍵。新しい一歩を小さく始めて","恋愛は感情のすれ違いに注意。期待だけで進まず確かめて"],"work":["仕事は周囲との協調が鍵。新しい提案の種を育てて","仕事は気分に左右されすぎないで。準備不足のまま着手しないで"]},"minor-カップ-2":{"love":["恋愛は気持ちのつながりが鍵。二つの選択肢を比べてみて","恋愛は感情のすれ違いに注意。迷いを長引かせず話して"],"work":["仕事は周囲との協調が鍵。見通しを立てて一歩進めて","仕事は気分に左右されすぎないで。決断を引き延ばしすぎないで"]},"minor-カップ-3":{"love":["恋愛は気持ちのつながりが鍵。これからの関係を想像して","恋愛は感情のすれ違いに注意。先を急がず今を見つめて"],"work":["仕事は周囲との協調が鍵。成果を待ちながら次を考えて","仕事は気分に左右されすぎないで。結果待ちで手を止めないで"]},"minor-カップ-4":{"love":["恋愛は気持ちのつながりが鍵。心地よい時間を分かち合って","恋愛は感情のすれ違いに注意。安心感を形だけで測らないで"],"work":["仕事は周囲との協調が鍵。小さな達成を仲間と喜んで","仕事は気分に左右されすぎないで。居心地の悪さを放置しないで"]},"minor-カップ-5":{"love":["恋愛は気持ちのつながりが鍵。意見の違いから学んでみて","恋愛は感情のすれ違いに注意。勝ち負けにこだわらないで"],"work":["仕事は周囲との協調が鍵。競争から得られる学びを探して","仕事は気分に左右されすぎないで。対立に力を使いすぎないで"]},"minor-カップ-6":{"love":["恋愛は気持ちのつながりが鍵。気持ちを丁寧に伝えて","恋愛は感情のすれ違いに注意。相手の反応だけに依存しないで"],"work":["仕事は周囲との協調が鍵。これまでの成果を共有して","仕事は気分に左右されすぎないで。承認を求めすぎないで"]},"minor-カップ-7":{"love":["恋愛は気持ちのつながりが鍵。大切な境界線を守って","恋愛は感情のすれ違いに注意。防御的な態度を緩めて"],"work":["仕事は周囲との協調が鍵。譲れない点を明確にして","仕事は気分に左右されすぎないで。一人で戦おうとしないで"]},"minor-カップ-8":{"love":["恋愛は気持ちのつながりが鍵。必要な連絡を早めにして","恋愛は感情のすれ違いに注意。急ぎすぎず確認を忘れずに"],"work":["仕事は周囲との協調が鍵。調整を素早く進めて","仕事は気分に左右されすぎないで。慌てて手順を飛ばさないで"]},"minor-カップ-9":{"love":["恋愛は気持ちのつながりが鍵。過去の経験を生かして向き合って","恋愛は感情のすれ違いに注意。疑いすぎて心を閉ざさないで"],"work":["仕事は周囲との協調が鍵。慎重に最後の一歩を進めて","仕事は気分に左右されすぎないで。警戒しすぎて機会を逃さないで"]},"minor-カップ-10":{"love":["恋愛は気持ちのつながりが鍵。自分ばかり我慢しないで","恋愛は感情のすれ違いに注意。抱えた負担を伝えて"],"work":["仕事は周囲との協調が鍵。仕事の量を見直して","仕事は気分に左右されすぎないで。責任を全部背負い込まないで"]},"minor-カップ-11":{"love":["恋愛は気持ちのつながりが鍵。素直な好奇心を大切にして","恋愛は感情のすれ違いに注意。一時の気分で決めつけないで"],"work":["仕事は周囲との協調が鍵。新しい学びを始めて","仕事は気分に左右されすぎないで。思いつきで方針を変えないで"]},"minor-カップ-12":{"love":["恋愛は気持ちのつながりが鍵。情熱を言葉にして伝えて","恋愛は感情のすれ違いに注意。相手のペースも尊重して"],"work":["仕事は周囲との協調が鍵。熱意を具体的な行動にして","仕事は気分に左右されすぎないで。焦って周囲を置き去りにしないで"]},"minor-カップ-13":{"love":["恋愛は気持ちのつながりが鍵。自分らしい魅力を認めて","恋愛は感情のすれ違いに注意。他人の評価で自信を決めないで"],"work":["仕事は周囲との協調が鍵。人を支える強みを発揮して","仕事は気分に左右されすぎないで。自分だけで抱え込まないで"]},"minor-カップ-14":{"love":["恋愛は気持ちのつながりが鍵。信頼できる態度を示して","恋愛は感情のすれ違いに注意。強い言葉で押し切らないで"],"work":["仕事は周囲との協調が鍵。方針を示しつつ話を聞いて","仕事は気分に左右されすぎないで。独断で進めないで"]},"minor-ソード-1":{"love":["恋愛は言葉の選び方が鍵。新しい一歩を小さく始めて","恋愛は考えすぎや鋭い言葉に注意。期待だけで進まず確かめて"],"work":["仕事は分析と判断が鍵。新しい提案の種を育てて","仕事は早合点や対立に注意。準備不足のまま着手しないで"]},"minor-ソード-2":{"love":["恋愛は言葉の選び方が鍵。二つの選択肢を比べてみて","恋愛は考えすぎや鋭い言葉に注意。迷いを長引かせず話して"],"work":["仕事は分析と判断が鍵。見通しを立てて一歩進めて","仕事は早合点や対立に注意。決断を引き延ばしすぎないで"]},"minor-ソード-3":{"love":["恋愛は言葉の選び方が鍵。これからの関係を想像して","恋愛は考えすぎや鋭い言葉に注意。先を急がず今を見つめて"],"work":["仕事は分析と判断が鍵。成果を待ちながら次を考えて","仕事は早合点や対立に注意。結果待ちで手を止めないで"]},"minor-ソード-4":{"love":["恋愛は言葉の選び方が鍵。心地よい時間を分かち合って","恋愛は考えすぎや鋭い言葉に注意。安心感を形だけで測らないで"],"work":["仕事は分析と判断が鍵。小さな達成を仲間と喜んで","仕事は早合点や対立に注意。居心地の悪さを放置しないで"]},"minor-ソード-5":{"love":["恋愛は言葉の選び方が鍵。意見の違いから学んでみて","恋愛は考えすぎや鋭い言葉に注意。勝ち負けにこだわらないで"],"work":["仕事は分析と判断が鍵。競争から得られる学びを探して","仕事は早合点や対立に注意。対立に力を使いすぎないで"]},"minor-ソード-6":{"love":["恋愛は言葉の選び方が鍵。気持ちを丁寧に伝えて","恋愛は考えすぎや鋭い言葉に注意。相手の反応だけに依存しないで"],"work":["仕事は分析と判断が鍵。これまでの成果を共有して","仕事は早合点や対立に注意。承認を求めすぎないで"]},"minor-ソード-7":{"love":["恋愛は言葉の選び方が鍵。大切な境界線を守って","恋愛は考えすぎや鋭い言葉に注意。防御的な態度を緩めて"],"work":["仕事は分析と判断が鍵。譲れない点を明確にして","仕事は早合点や対立に注意。一人で戦おうとしないで"]},"minor-ソード-8":{"love":["恋愛は言葉の選び方が鍵。必要な連絡を早めにして","恋愛は考えすぎや鋭い言葉に注意。急ぎすぎず確認を忘れずに"],"work":["仕事は分析と判断が鍵。調整を素早く進めて","仕事は早合点や対立に注意。慌てて手順を飛ばさないで"]},"minor-ソード-9":{"love":["恋愛は言葉の選び方が鍵。過去の経験を生かして向き合って","恋愛は考えすぎや鋭い言葉に注意。疑いすぎて心を閉ざさないで"],"work":["仕事は分析と判断が鍵。慎重に最後の一歩を進めて","仕事は早合点や対立に注意。警戒しすぎて機会を逃さないで"]},"minor-ソード-10":{"love":["恋愛は言葉の選び方が鍵。自分ばかり我慢しないで","恋愛は考えすぎや鋭い言葉に注意。抱えた負担を伝えて"],"work":["仕事は分析と判断が鍵。仕事の量を見直して","仕事は早合点や対立に注意。責任を全部背負い込まないで"]},"minor-ソード-11":{"love":["恋愛は言葉の選び方が鍵。素直な好奇心を大切にして","恋愛は考えすぎや鋭い言葉に注意。一時の気分で決めつけないで"],"work":["仕事は分析と判断が鍵。新しい学びを始めて","仕事は早合点や対立に注意。思いつきで方針を変えないで"]},"minor-ソード-12":{"love":["恋愛は言葉の選び方が鍵。情熱を言葉にして伝えて","恋愛は考えすぎや鋭い言葉に注意。相手のペースも尊重して"],"work":["仕事は分析と判断が鍵。熱意を具体的な行動にして","仕事は早合点や対立に注意。焦って周囲を置き去りにしないで"]},"minor-ソード-13":{"love":["恋愛は言葉の選び方が鍵。自分らしい魅力を認めて","恋愛は考えすぎや鋭い言葉に注意。他人の評価で自信を決めないで"],"work":["仕事は分析と判断が鍵。人を支える強みを発揮して","仕事は早合点や対立に注意。自分だけで抱え込まないで"]},"minor-ソード-14":{"love":["恋愛は言葉の選び方が鍵。信頼できる態度を示して","恋愛は考えすぎや鋭い言葉に注意。強い言葉で押し切らないで"],"work":["仕事は分析と判断が鍵。方針を示しつつ話を聞いて","仕事は早合点や対立に注意。独断で進めないで"]},"minor-ペンタクル-1":{"love":["恋愛は日々の信頼が鍵。新しい一歩を小さく始めて","恋愛は安心へのこだわりに注意。期待だけで進まず確かめて"],"work":["仕事は地道な積み重ねが鍵。新しい提案の種を育てて","仕事は現状維持への固執に注意。準備不足のまま着手しないで"]},"minor-ペンタクル-2":{"love":["恋愛は日々の信頼が鍵。二つの選択肢を比べてみて","恋愛は安心へのこだわりに注意。迷いを長引かせず話して"],"work":["仕事は地道な積み重ねが鍵。見通しを立てて一歩進めて","仕事は現状維持への固執に注意。決断を引き延ばしすぎないで"]},"minor-ペンタクル-3":{"love":["恋愛は日々の信頼が鍵。これからの関係を想像して","恋愛は安心へのこだわりに注意。先を急がず今を見つめて"],"work":["仕事は地道な積み重ねが鍵。成果を待ちながら次を考えて","仕事は現状維持への固執に注意。結果待ちで手を止めないで"]},"minor-ペンタクル-4":{"love":["恋愛は日々の信頼が鍵。心地よい時間を分かち合って","恋愛は安心へのこだわりに注意。安心感を形だけで測らないで"],"work":["仕事は地道な積み重ねが鍵。小さな達成を仲間と喜んで","仕事は現状維持への固執に注意。居心地の悪さを放置しないで"]},"minor-ペンタクル-5":{"love":["恋愛は日々の信頼が鍵。意見の違いから学んでみて","恋愛は安心へのこだわりに注意。勝ち負けにこだわらないで"],"work":["仕事は地道な積み重ねが鍵。競争から得られる学びを探して","仕事は現状維持への固執に注意。対立に力を使いすぎないで"]},"minor-ペンタクル-6":{"love":["恋愛は日々の信頼が鍵。気持ちを丁寧に伝えて","恋愛は安心へのこだわりに注意。相手の反応だけに依存しないで"],"work":["仕事は地道な積み重ねが鍵。これまでの成果を共有して","仕事は現状維持への固執に注意。承認を求めすぎないで"]},"minor-ペンタクル-7":{"love":["恋愛は日々の信頼が鍵。大切な境界線を守って","恋愛は安心へのこだわりに注意。防御的な態度を緩めて"],"work":["仕事は地道な積み重ねが鍵。譲れない点を明確にして","仕事は現状維持への固執に注意。一人で戦おうとしないで"]},"minor-ペンタクル-8":{"love":["恋愛は日々の信頼が鍵。必要な連絡を早めにして","恋愛は安心へのこだわりに注意。急ぎすぎず確認を忘れずに"],"work":["仕事は地道な積み重ねが鍵。調整を素早く進めて","仕事は現状維持への固執に注意。慌てて手順を飛ばさないで"]},"minor-ペンタクル-9":{"love":["恋愛は日々の信頼が鍵。過去の経験を生かして向き合って","恋愛は安心へのこだわりに注意。疑いすぎて心を閉ざさないで"],"work":["仕事は地道な積み重ねが鍵。慎重に最後の一歩を進めて","仕事は現状維持への固執に注意。警戒しすぎて機会を逃さないで"]},"minor-ペンタクル-10":{"love":["恋愛は日々の信頼が鍵。自分ばかり我慢しないで","恋愛は安心へのこだわりに注意。抱えた負担を伝えて"],"work":["仕事は地道な積み重ねが鍵。仕事の量を見直して","仕事は現状維持への固執に注意。責任を全部背負い込まないで"]},"minor-ペンタクル-11":{"love":["恋愛は日々の信頼が鍵。素直な好奇心を大切にして","恋愛は安心へのこだわりに注意。一時の気分で決めつけないで"],"work":["仕事は地道な積み重ねが鍵。新しい学びを始めて","仕事は現状維持への固執に注意。思いつきで方針を変えないで"]},"minor-ペンタクル-12":{"love":["恋愛は日々の信頼が鍵。情熱を言葉にして伝えて","恋愛は安心へのこだわりに注意。相手のペースも尊重して"],"work":["仕事は地道な積み重ねが鍵。熱意を具体的な行動にして","仕事は現状維持への固執に注意。焦って周囲を置き去りにしないで"]},"minor-ペンタクル-13":{"love":["恋愛は日々の信頼が鍵。自分らしい魅力を認めて","恋愛は安心へのこだわりに注意。他人の評価で自信を決めないで"],"work":["仕事は地道な積み重ねが鍵。人を支える強みを発揮して","仕事は現状維持への固執に注意。自分だけで抱え込まないで"]},"minor-ペンタクル-14":{"love":["恋愛は日々の信頼が鍵。信頼できる態度を示して","恋愛は安心へのこだわりに注意。強い言葉で押し切らないで"],"work":["仕事は地道な積み重ねが鍵。方針を示しつつ話を聞いて","仕事は現状維持への固執に注意。独断で進めないで"]}};
+</script>
+  <script>
 /* 1枚引きタロット：サーバー・AI・外部APIなしで動作します。 */
 (function () {
   'use strict';
   const CARDS = window.TAROT_CARDS;
+  const ADVICE = window.TAROT_THEME_ADVICE;
+  const THEME_NAMES = {today: "今日の運勢", love: "恋愛運", work: "仕事運"};
+  let selectedTheme = "today";
   if (!Array.isArray(CARDS) || CARDS.length !== 78) {
     throw new Error('78枚のカードデータが必要です。');
   }
@@ -107,17 +125,18 @@ window.TAROT_CARDS = [{"id":"major-0","name":"愚者","icon":"✦","kind":"major
     return Math.floor(Math.random() * max);
   }
 
-  function drawCard() {
+  function drawCard(theme = selectedTheme) {
     const item = CARDS[randomInt(CARDS.length)];
     const reversed = randomInt(2) === 1;
     const [keyword, message] = reversed ? item.reversed : item.upright;
+    const advice = theme === "today" ? "" : ADVICE[item.id][theme][Number(reversed)];
     return {
       id: item.id,
       name: item.name,
       icon: item.icon,
       kind: item.kind,
       orientation: reversed ? '逆位置' : '正位置',
-      reversed, keyword, message
+      reversed, keyword, message, theme, advice
     };
   }
 
@@ -135,6 +154,9 @@ window.TAROT_CARDS = [{"id":"major-0","name":"愚者","icon":"✦","kind":"major
     $('result-cardname').textContent = `${result.name}・${result.orientation}`;
     $('result-keyword').textContent = `「${result.keyword}」`;
     $('result-message').textContent = result.message;
+    $('result-heading').textContent = THEME_NAMES[result.theme] + 'のメッセージ';
+    $('theme-advice').hidden = !result.advice;
+    $('theme-advice').textContent = result.advice;
     $('draw-label').textContent = 'もう一度引く';
     $('action-note').textContent = '引くたびに、新しく1枚選ばれます';
     cardEl.classList.add('flipped');
@@ -142,7 +164,7 @@ window.TAROT_CARDS = [{"id":"major-0","name":"愚者","icon":"✦","kind":"major
   }
 
   function formatResult(result) {
-    return `☾ 月灯りのタロット｜今日の運勢\n${result.name}・${result.orientation}\n「${result.keyword}」\n${result.message}\n※占いはエンターテインメントです。`;
+    return `☾ 月灯りのタロット｜${THEME_NAMES[result.theme]}\n${result.name}・${result.orientation}\n「${result.keyword}」\n${result.message}${result.advice ? "\n"+result.advice : ""}\n※占いはエンターテインメントです。`;
   }
 
   async function copyResult() {
@@ -166,6 +188,22 @@ window.TAROT_CARDS = [{"id":"major-0","name":"愚者","icon":"✦","kind":"major
     }
   }
 
+  document.querySelectorAll('.theme-option').forEach(option => {
+    option.addEventListener('click', () => {
+      selectedTheme = option.dataset.theme;
+      document.querySelectorAll('.theme-option').forEach(el => {
+        const isSelected = el.dataset.theme === selectedTheme;
+        el.classList.toggle('active', isSelected);
+        el.setAttribute('aria-pressed', String(isSelected));
+      });
+      latest = null;
+      $('result').hidden = true;
+      cardEl.classList.remove('flipped');
+      $('draw-label').textContent = 'カードを1枚引く';
+      $('action-note').textContent = '78枚からランダムに1枚を選びます';
+      $('copy-status').textContent = '';
+    });
+  });
   button.addEventListener('click', () => { latest = drawCard(); render(latest); });
   $('copy-button').addEventListener('click', copyResult);
   // ブラウザ開発者向け：自動テストに使える抽選エンジン。
